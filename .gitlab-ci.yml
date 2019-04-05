@@ -1,0 +1,6 @@
+run_tests:
+   script:
+     - ${DOCKER_WORKDIR}/compile.sh
+   tags:
+     - hr-lecture
+
