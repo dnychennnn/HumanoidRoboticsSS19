@@ -82,9 +82,17 @@ double LinearAlgebra::dotProduct(const Eigen::Vector3d& a, const Eigen::Vector3d
 
 bool LinearAlgebra::isLinearIndependent(const Eigen::Vector3d& a, const Eigen::Vector3d& b) {
 	bool result = false;
-	
+	Eigen::Matrix3d M;
 	/* TODO: test if the vectors a and b are linear independent.
 	   Return true if they are independent, false if they are dependent.*/
+	for(int i=0; i<3; i++){
+		M(1,i) = a[i];
+		M(2,i) = b[i];
+	}
+	
+	if(M.determinant()==0){
+		result = true;
+	}
 
 	return result;
 }
