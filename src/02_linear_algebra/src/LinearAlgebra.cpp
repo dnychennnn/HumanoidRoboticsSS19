@@ -90,7 +90,7 @@ bool LinearAlgebra::isLinearIndependent(const Eigen::Vector3d& a, const Eigen::V
 		M(2,i) = b[i];
 	}
 	
-	if(M.determinant()==0){
+	if(M.determinant()!=0){
 		result = true;
 	}
 
