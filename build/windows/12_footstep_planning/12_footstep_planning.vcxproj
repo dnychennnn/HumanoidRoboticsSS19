@@ -21,9 +21,9 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C9CDEF95-E218-4441-8CFC-A9D9EBA0B0AC}</ProjectGuid>
     <RootNamespace>My12_footstep_planning</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -50,24 +50,24 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -128,28 +128,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\12_footstep_planning\src\ClosedList.cpp"/>
-    <ClCompile Include="..\..\..\src\12_footstep_planning\src\FileIO.cpp"/>
-    <ClCompile Include="..\..\..\src\12_footstep_planning\src\FootstepMap.cpp"/>
-    <ClCompile Include="..\..\..\src\12_footstep_planning\src\FootstepNode.cpp"/>
-    <ClCompile Include="..\..\..\src\12_footstep_planning\src\FootstepPlanning.cpp"/>
-    <ClCompile Include="..\..\..\src\12_footstep_planning\src\main.cpp"/>
-    <ClCompile Include="..\..\..\src\12_footstep_planning\src\OpenList.cpp"/>
-    <ClCompile Include="..\..\..\src\12_footstep_planning\src\PathPlanning.cpp"/>
+    <ClCompile Include="..\..\..\src\12_footstep_planning\src\ClosedList.cpp" />
+    <ClCompile Include="..\..\..\src\12_footstep_planning\src\FileIO.cpp" />
+    <ClCompile Include="..\..\..\src\12_footstep_planning\src\FootstepMap.cpp" />
+    <ClCompile Include="..\..\..\src\12_footstep_planning\src\FootstepNode.cpp" />
+    <ClCompile Include="..\..\..\src\12_footstep_planning\src\FootstepPlanning.cpp" />
+    <ClCompile Include="..\..\..\src\12_footstep_planning\src\main.cpp" />
+    <ClCompile Include="..\..\..\src\12_footstep_planning\src\OpenList.cpp" />
+    <ClCompile Include="..\..\..\src\12_footstep_planning\src\PathPlanning.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\AbstractNode.h"/>
-    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\ClosedList.h"/>
-    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\FileIO.h"/>
-    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\FootstepMap.h"/>
-    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\FootstepNode.h"/>
-    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\FootstepPlanning.h"/>
-    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\GridMap.h"/>
-    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\Heuristic.h"/>
-    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\OpenList.h"/>
-    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\PathPlanning.h"/>
+    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\AbstractNode.h" />
+    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\ClosedList.h" />
+    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\FileIO.h" />
+    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\FootstepMap.h" />
+    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\FootstepNode.h" />
+    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\FootstepPlanning.h" />
+    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\GridMap.h" />
+    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\Heuristic.h" />
+    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\OpenList.h" />
+    <ClInclude Include="..\..\..\src\12_footstep_planning\include\footstep_planning\PathPlanning.h" />
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>
