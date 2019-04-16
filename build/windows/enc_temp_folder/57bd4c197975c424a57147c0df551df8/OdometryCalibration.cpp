@@ -67,10 +67,9 @@ Eigen::Matrix3d OdometryCalibration::calibrateOdometry(const std::vector<Measure
 	}
 
 	Eigen::ColPivHouseholderQR<Eigen::MatrixXd> dec(H);
-	Eigen::VectorXd solution_vector = -dec.solve(b);
-	Eigen::Map<Eigen::Matrix3d> transposed_correction_term(solution_vector.data(), 3,3);
-	
-	calibrationMatrix += transposed_correction_term.transpose();
+	Eigen::VectorXd delta_x = -dec.solve(b);
+	Eigen::Map<Eigen::Matrix3d> del(delta_x.data(), 3,3);
+	std::cout << del << std::endl << delta_x;
 
 	return calibrationMatrix;
 }
