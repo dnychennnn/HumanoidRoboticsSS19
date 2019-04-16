@@ -21,9 +21,9 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4CE8E3D6-E01F-4D4B-BF70-FB2924A01223}</ProjectGuid>
     <RootNamespace>My16_rrt</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -50,24 +50,24 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -128,21 +128,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\16_rrt\src\FileIO.cpp"/>
-    <ClCompile Include="..\..\..\src\16_rrt\src\GridNode.cpp"/>
-    <ClCompile Include="..\..\..\src\16_rrt\src\Logger.cpp"/>
-    <ClCompile Include="..\..\..\src\16_rrt\src\main.cpp"/>
-    <ClCompile Include="..\..\..\src\16_rrt\src\RRT.cpp"/>
+    <ClCompile Include="..\..\..\src\16_rrt\src\FileIO.cpp" />
+    <ClCompile Include="..\..\..\src\16_rrt\src\GridNode.cpp" />
+    <ClCompile Include="..\..\..\src\16_rrt\src\Logger.cpp" />
+    <ClCompile Include="..\..\..\src\16_rrt\src\main.cpp" />
+    <ClCompile Include="..\..\..\src\16_rrt\src\RRT.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\16_rrt\include\rrt\AbstractNode.h"/>
-    <ClInclude Include="..\..\..\src\16_rrt\include\rrt\FileIO.h"/>
-    <ClInclude Include="..\..\..\src\16_rrt\include\rrt\GridMap.h"/>
-    <ClInclude Include="..\..\..\src\16_rrt\include\rrt\GridNode.h"/>
-    <ClInclude Include="..\..\..\src\16_rrt\include\rrt\Logger.h"/>
-    <ClInclude Include="..\..\..\src\16_rrt\include\rrt\RRT.h"/>
+    <ClInclude Include="..\..\..\src\16_rrt\include\rrt\AbstractNode.h" />
+    <ClInclude Include="..\..\..\src\16_rrt\include\rrt\FileIO.h" />
+    <ClInclude Include="..\..\..\src\16_rrt\include\rrt\GridMap.h" />
+    <ClInclude Include="..\..\..\src\16_rrt\include\rrt\GridNode.h" />
+    <ClInclude Include="..\..\..\src\16_rrt\include\rrt\Logger.h" />
+    <ClInclude Include="..\..\..\src\16_rrt\include\rrt\RRT.h" />
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>
