@@ -13,7 +13,7 @@ namespace odometry_calibration {
  */
 Eigen::Vector3d OdometryCalibration::errorFunction(const Odometry& groundTruth, const Odometry& observation, const Eigen::Matrix3d& calibrationMatrix) {
 	Eigen::Vector3d error;
-	//TODO: Compute the error vector.
+	//TODO: Compute the error vector. 
 	Eigen::Vector3d prediction;
 	error << groundTruth.ux, groundTruth.uy, groundTruth.utheta;
 	prediction << observation.ux, observation.uy, observation.utheta;
@@ -55,7 +55,7 @@ Eigen::Matrix3d OdometryCalibration::calibrateOdometry(const std::vector<Measure
 	 * - Update the calibration matrix
 	 */
 	for(int i=0; i<measurements.size(); i++){
-		measurements[i].
+		// measurements[i].
 	}
 
 	
