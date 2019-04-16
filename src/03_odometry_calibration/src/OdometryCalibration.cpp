@@ -101,7 +101,7 @@ Eigen::Matrix3d OdometryCalibration::odometryToAffineTransformation(const Odomet
 
 	transformation << cos(odometry.utheta), -sin(odometry.utheta), odometry.ux,
 					sin(odometry.utheta), cos(odometry.utheta), odometry.uy,
-					0, 0, 1;
+					0.0, 0.0, 1.0;
 
 	return transformation;
 }
@@ -121,8 +121,6 @@ Pose2D OdometryCalibration::affineTransformationToPose(const Eigen::Matrix3d& tr
 	pose.x = 0.0;
 	pose.y = 0.0;
 	pose.theta = 0.0;
-
-	std::cout << transformation(0,0) << transformation(1,0) << std::endl;
 
 	pose.x += transformation(0,2);
 	pose.y += transformation(1,2);
@@ -147,6 +145,21 @@ std::vector<Pose2D> OdometryCalibration::calculateTrajectory(const std::vector<O
 	 *   affineTransformationToPose method from above.
 	 * - Store the pose in the trajectory vector.
 	 */
+
+	Eigen::Matrix3d affine = Eigen::Matrix3d::Identity(3, 3);
+
+	Pose2D pose;
+
+	for( auto co:calibratedOdometry){
+		
+		std::cout << odometryToAffineTransformation(co) << std::endl;
+		affine *= odometryToAffineTransformation(co);
+		std::cout << affine << std::endl;
+		pose = affineTransformationToPose(affine);
+		trajectory.push_back(pose);
+	
+	} 
+
 
 	return trajectory;
 }
