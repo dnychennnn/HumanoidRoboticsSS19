@@ -98,6 +98,11 @@ Odometry OdometryCalibration::applyOdometryCorrection(const Odometry& uncalibrat
 Eigen::Matrix3d OdometryCalibration::odometryToAffineTransformation(const Odometry& odometry) {
 	Eigen::Matrix3d transformation;
 	//TODO: Convert the odometry measurement to an affine transformation matrix.
+
+	transformation << cos(odometry.utheta), -sin(odometry.utheta), odometry.ux,
+					sin(odometry.utheta), cos(odometry.utheta), odometry.uy,
+					0, 0, 1;
+
 	return transformation;
 }
 
@@ -116,9 +121,15 @@ Pose2D OdometryCalibration::affineTransformationToPose(const Eigen::Matrix3d& tr
 	pose.x = 0.0;
 	pose.y = 0.0;
 	pose.theta = 0.0;
+
+	std::cout << transformation(0,0) << transformation(1,0) << std::endl;
+
+	pose.x += transformation(0,2);
+	pose.y += transformation(1,2);
+	pose.theta = atan2(transformation(1,0), transformation(0,0));
+
 	return pose;
 }
-
 /**
  * \brief Calculate the robot's trajectory in Cartesian coordinates given a list of calibrated odometry measurements.
  * \param[in] calibratedOdometry Odometry measurements that have already been corrected using the applyOdometryCorrection method.
