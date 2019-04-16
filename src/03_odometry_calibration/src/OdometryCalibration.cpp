@@ -55,7 +55,8 @@ Eigen::Matrix3d OdometryCalibration::calibrateOdometry(const std::vector<Measure
 	 * - Update the calibration matrix
 	 */
 	for(int i=0; i<measurements.size(); i++){
-		// measurements[i].
+		auto error_i = errorFunction(measurements[i].groundTruth, measurements[i].uncalibrated, calibrationMatrix);
+		auto J_i = jacobian(measurements[i].uncalibrated);
 	}
 
 	
