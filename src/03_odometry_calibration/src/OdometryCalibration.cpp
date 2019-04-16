@@ -1,5 +1,6 @@
 #include <odometry_calibration/OdometryCalibration.h>
 #include <cmath>
+#include <iostream>
 
 namespace odometry_calibration {
 
@@ -13,6 +14,12 @@ namespace odometry_calibration {
 Eigen::Vector3d OdometryCalibration::errorFunction(const Odometry& groundTruth, const Odometry& observation, const Eigen::Matrix3d& calibrationMatrix) {
 	Eigen::Vector3d error;
 	//TODO: Compute the error vector.
+	Eigen::Vector3d prediction;
+	error << groundTruth.ux, groundTruth.uy, groundTruth.utheta;
+	prediction << observation.ux, observation.uy, observation.utheta;
+	prediction = calibrationMatrix * prediction;
+	error = error - prediction;
+
 	return error;
 }
 
@@ -24,6 +31,11 @@ Eigen::Vector3d OdometryCalibration::errorFunction(const Odometry& groundTruth, 
 Eigen::Matrix3Xd OdometryCalibration::jacobian(const Odometry& observation) {
 	Eigen::Matrix3Xd jacobian(3, 9);
 	//TODO: Calculate the 3x9 Jacobian matrix of the error function for the given observation.
+	
+	jacobian <<  observation.ux, observation.uy, observation.utheta, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, observation.ux, observation.uy, observation.utheta, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, observation.ux, observation.uy, observation.utheta;
+
 	return jacobian;
 }
 
@@ -42,6 +54,13 @@ Eigen::Matrix3d OdometryCalibration::calibrateOdometry(const std::vector<Measure
 	 * - Solve the linear system
 	 * - Update the calibration matrix
 	 */
+	for(int i=0; i<measurements.size(); i++){
+		measurements[i].
+	}
+
+	
+
+
 	return calibrationMatrix;
 }
 
