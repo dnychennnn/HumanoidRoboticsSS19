@@ -93,9 +93,8 @@ bool LinearAlgebra::isLinearIndependent(const Eigen::Vector3d& a, const Eigen::V
 	if(M.determinant()!=0){
 		result = true;
 	}
-
 	return result;
-}
+	}
 
 Eigen::Vector3d LinearAlgebra::solveLinearSystem(const Eigen::Matrix3d& M, const Eigen::Vector3d& a) {
 	Eigen::Vector3d result;

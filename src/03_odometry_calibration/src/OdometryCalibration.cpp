@@ -76,6 +76,17 @@ Odometry OdometryCalibration::applyOdometryCorrection(const Odometry& uncalibrat
 	/*TODO: Given the calibration matrix, return the corrected odometry measurement so that the robot has
 	 * a better estimate of the location where it is currently.
 	 */
+	Eigen::Vector3d uncalibrated;
+	Eigen::Vector3d calibrated;
+
+	uncalibrated << uncalibratedOdometry.ux, uncalibratedOdometry.uy, uncalibratedOdometry.utheta;
+	
+	calibrated = calibrationMatrix * uncalibrated;
+
+	calibratedOdometry.ux = calibrated(0);
+	calibratedOdometry.uy = calibrated(1);
+	calibratedOdometry.utheta = calibrated(2);
+
 	return calibratedOdometry;
 }
 
