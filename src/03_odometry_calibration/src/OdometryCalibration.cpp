@@ -161,13 +161,9 @@ std::vector<Pose2D> OdometryCalibration::calculateTrajectory(const std::vector<O
 	Pose2D pose;
 
 	for( auto co:calibratedOdometry){
-		
-		std::cout << odometryToAffineTransformation(co) << std::endl;
 		affine *= odometryToAffineTransformation(co);
-		std::cout << affine << std::endl;
 		pose = affineTransformationToPose(affine);
-		trajectory.push_back(pose);
-	
+		trajectory.push_back(pose);	
 	} 
 
 
