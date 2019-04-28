@@ -15,6 +15,8 @@ Eigen::Vector4d ProjectiveGeometry::euclideanToHomogeneous(const Eigen::Vector3d
     Eigen::Vector4d result = Eigen::Vector4d::Zero();
     //TODO
 
+    result << point, 1;
+
     return result;
 }
 /**
@@ -26,6 +28,9 @@ Eigen::Vector2d ProjectiveGeometry::homogeneousToEuclidean(const Eigen::Vector3d
 {
     Eigen::Vector2d result = Eigen::Vector2d::Zero();
     //TODO
+
+    result(0) = point(0)/point(2);
+    result(1) = point(1)/point(2);
 
     return result;
 }
@@ -39,6 +44,14 @@ CameraParameters ProjectiveGeometry::setCameraParameters(const double alpha)
     CameraParameters results;
     //TODO
 
+    results.xH = 400;
+    results.yH = 300;
+    results.c = 550;
+    results.m = 0.0025;
+    results.X0 << 0.4, 0, 10;   
+    results.rotX = 0;
+    results.rotY = alpha;
+    results.rotZ = 0;
     return results;
 }
 /**
@@ -50,6 +63,10 @@ Eigen::Matrix3d ProjectiveGeometry::calibrationMatrix(const CameraParameters& pa
 {
     Eigen::Matrix3d result = Eigen::Matrix3d::Zero();
     //TODO
+
+    result << param.c, 0, param.xH,
+            0, param.c * (1+param.m), param.yH,
+            0, 0, 1; 
 
 
     return result;
@@ -66,6 +83,19 @@ Eigen::MatrixXd ProjectiveGeometry::projectionMatrix(const Eigen::Matrix3d& cali
 	Eigen::MatrixXd result = Eigen::MatrixXd::Zero(3, 4);
     //TODO
 
+    Eigen::MatrixXd translationMatrix(3,4);
+    Eigen::MatrixXd rotationMatrix(3,3);
+
+    translationMatrix << 1,0,0,-param.X0(0),
+                        0,1,0,-param.X0(1),
+                        0,0,1,-param.X0(2);
+    rotationMatrix << cos(param.rotY), 0, sin(param.rotY),
+                        0, 1, 0,
+                        -sin(param.rotY), 0, cos(param.rotY);
+
+                       
+
+    result = calibrationMatrix * rotationMatrix * translationMatrix;
     return result;
 }
 /**
@@ -79,6 +109,7 @@ Eigen::Vector2d ProjectiveGeometry::projectPoint(const Eigen::Vector3d& point, c
     Eigen::Vector2d result = Eigen::Vector2d::Zero();
     //TODO
 
+    result  = homogeneousToEuclidean( projectionMatrix * euclideanToHomogeneous(point));
     return result;
 }
 
@@ -92,10 +123,27 @@ Eigen::Vector2d ProjectiveGeometry::projectPoint(const Eigen::Vector3d& point, c
  */
 Eigen::Vector3d ProjectiveGeometry::reprojectTo3D(const Eigen::Vector2d& imagePoint, const Eigen::Matrix3d& calibrationMatrix,
 		const CameraParameters& param, const double tableHeight) {
+
+
     Eigen::Vector3d coordinates3D = Eigen::Vector3d::Zero();
-
-    // TODO
-
+    Eigen::Vector3d h_xy;
+    Eigen::Matrix3d A;
+    Eigen::Matrix3d R;
+    Eigen::Matrix3d h_kra;
+    R << cos(param.rotY), 0, sin(param.rotY),
+        0, 1, 0,
+        -sin(param.rotY), 0, cos(param.rotY);
+    A <<1, 0, -param.X0(0)/tableHeight,
+        0, 1, -param.X0(1)/tableHeight,
+        0, 0, 1-param.X0(2)/tableHeight;
+    h_xy << imagePoint(0), imagePoint(1), 1;
+    h_kra = calibrationMatrix * R * A;
+    Eigen::Vector3d h_uvw = h_kra.colPivHouseholderQr().solve(h_xy);
+    double u = h_uvw(0);
+    double v = h_uvw(1);
+    double w = h_uvw(2);
+    double t = w/tableHeight;
+    coordinates3D << u/t, v/t, w/t;
     return coordinates3D;
 }
 
