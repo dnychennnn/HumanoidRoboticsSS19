@@ -1,0 +1,57 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "echo",
+      "type": "shell",
+      "command": "echo ${workspaceFolder}"
+    },
+    {
+      "label": "echo dir",
+      "type": "shell",
+      "command": "echo ${workspaceFolderBasename}"
+    },
+    {
+        "type": "shell",
+        "label": "cmake build all debug",
+        "command": "/usr/bin/cmake",
+        "args": [
+          "--build",
+          "${workspaceFolder}/../../build/linux/${workspaceFolderBasename}",
+          "--config",
+          "Debug",
+          "--target",
+          "all",
+          "--",
+          "",
+          "-j",
+          "6"
+        ],
+        "options": {
+          "cwd": "/usr/bin"
+        }
+    },
+    {
+      "type": "shell",
+      "label": "g++ build active file",
+      "command": "/usr/bin/g++",
+      "args": [
+        "-g",
+        "${file}",
+        "-o",
+        "${fileDirname}/${fileBasenameNoExtension}"
+      ],
+      "options": {
+        "cwd": "/usr/bin"
+      }
+    },
+    {
+      "label": "run test",
+      "type": "shell",
+      "command": "./",
+      "args": [
+        "${workspaceFolder}/../../build/linux/${workspaceFolderBasename}/projective_geometry-test"
+      ]
+    }
+  ]
+}
