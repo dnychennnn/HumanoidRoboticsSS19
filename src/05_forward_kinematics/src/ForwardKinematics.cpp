@@ -48,6 +48,11 @@ ForwardKinematics::ForwardKinematics() {
 Eigen::Matrix4d ForwardKinematics::rotationX(const double& angle) {
 	Eigen::Matrix4d M;
 	//TODO: write the rotation matrix
+	M << 1, 0, 0, 0,
+		0, cos(angle), -sin(angle), 0,
+		0, sin(angle), cos(angle), 0, 
+		0, 0, 0, 1;
+	
 	return M;
 }
 
@@ -59,6 +64,10 @@ Eigen::Matrix4d ForwardKinematics::rotationX(const double& angle) {
 Eigen::Matrix4d ForwardKinematics::rotationZ(const double& angle) {
 	Eigen::Matrix4d M;
 	//TODO: write the rotation matrix
+	M << cos(angle), -sin(angle), 0, 0,
+	sin(angle), cos(angle), 0, 0,
+	0, 0, 1, 0, 
+	0, 0, 0, 1;
 	return M;
 }
 
