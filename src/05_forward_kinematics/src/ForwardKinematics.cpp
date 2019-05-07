@@ -122,6 +122,21 @@ Eigen::Matrix4d ForwardKinematics::getA(const DH& dh, const double& encoderReadi
 Eigen::Matrix4d ForwardKinematics::computeHandTransform(const double encoderReading[5]) {
 	Eigen::Matrix4d M;
 	//TODO Calculate the whole transformation from the hand to the body.
+	Eigen::Matrix4d T_E;
+	M << 1, 0, 0, 0,
+		0, 0, 1, 0.098,
+		0, -1, 0, 0.100,
+		0, 0, 0, 1;
+	T_E << 0, 1, 0, 0.00159,
+		1, 0, 0, 0.0580,
+		0, 0, -1, 0,
+		0, 0, 0, 1;
+
+	for (int i = 0; i <= 4; i++) {
+		M *= getA(dh[i], encoderReading[i]);
+	}
+	M *= T_E;
+
 	return M;
 }
 
