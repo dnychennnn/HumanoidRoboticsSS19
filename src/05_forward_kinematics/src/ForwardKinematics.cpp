@@ -127,7 +127,7 @@ Eigen::Matrix4d ForwardKinematics::computeHandTransform(const double encoderRead
 		0, 0, 1, 0.098,
 		0, -1, 0, 0.100,
 		0, 0, 0, 1;
-	T_E << 0, 1, 0, 0.00159,
+	T_E << 0, 1, 0, 0.0159,
 		1, 0, 0, 0.0580,
 		0, 0, -1, 0,
 		0, 0, 0, 1;
