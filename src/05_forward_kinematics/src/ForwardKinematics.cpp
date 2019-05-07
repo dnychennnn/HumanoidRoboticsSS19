@@ -78,6 +78,10 @@ Eigen::Matrix4d ForwardKinematics::rotationZ(const double& angle) {
  */
 Eigen::Matrix4d ForwardKinematics::translationX(const double& distance) {
 	Eigen::Matrix4d M;
+	M <<1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, distance,
+		0, 0, 0, 1;
 	return M;
 }
 
