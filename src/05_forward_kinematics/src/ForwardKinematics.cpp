@@ -108,6 +108,7 @@ Eigen::Matrix4d ForwardKinematics::translationZ(const double& distance) {
 Eigen::Matrix4d ForwardKinematics::getA(const DH& dh, const double& encoderReading) {
 	Eigen::Matrix4d A;
 	//TODO: Calculate the transformation for a single joint.
+	A = rotationZ(encoderReading + dh.theta) * translationZ(dh.d) * rotationX(dh.alpha) * translationX(dh.a);
 	return A;
 }
 
