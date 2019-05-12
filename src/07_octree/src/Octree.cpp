@@ -177,7 +177,7 @@ Node* Node::split(const Eigen::Vector3d& point) {
  * \return True if the children have been merged, false otherwise.
  */
 bool Node::merge() {
-	bool merged = false;
+	//bool merged = false;
 	
 	/* TODO:
 	 * 1. Check if the children can be merged
@@ -191,7 +191,26 @@ bool Node::merge() {
 	 * - const unsigned int depth: depth of the current node within the tree (0 = root node)
 	 */
 
-	return merged;
+	Content cont = children[0]->content;
+
+	if (cont == MIXED) {
+		return false;
+	}
+
+	for (size_t i = 1; i < 8; i++) {
+		if (children[i]->content != cont) {
+			return false;
+		}
+	}
+
+	// if this point is reached, all children have identical content (which is not MIXED) -> merge!
+
+	for (size_t i = 0; i < 8; i++) {
+		delete children[i];
+		children[i] = NULL;
+	}
+	content = cont;
+	return true;
 }
 
 }  // namespace octree
