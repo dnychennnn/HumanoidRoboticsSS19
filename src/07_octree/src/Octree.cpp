@@ -162,10 +162,22 @@ Node* Node::split(const Eigen::Vector3d& point) {
 	 * - findNode(const Eigen::Vector3d& point): method defined above
 	 */
 	content = MIXED;
+	Eigen::Vector3d origin = (corner1 + corner2) / 2.0;
+	//assume that always corner1(i) < corner2(i)
+	Eigen::Vector3d newcorner1, newcorner2;
 	for (size_t i = 0; i < 8; i++) {
-		children[i] = new Node(corner1, corner2, this, depth + 1, FREE);
+		for (size_t j = 0; j < 3; j++) {
+			if (i & (1<<j)) {
+				newcorner1(j) = origin(j);
+				newcorner2(j) = corner2(j);
+			}
+			else {
+				newcorner1(j) = corner1(j);
+				newcorner2(j) = origin(j);
+			}
+		}
+		children[i] = new Node(newcorner1, newcorner2, this, depth + 1, FREE);
 	}
-
 	result = children[findIndex(point)];
 	result->content = OCCUPIED;
 
