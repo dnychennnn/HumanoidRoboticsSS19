@@ -24,7 +24,16 @@ double SignedDistanceFunction::calculateDistance(const Eigen::Vector2d& pointA, 
  * \return The truncated signed distance.
  */
 double SignedDistanceFunction::truncateDistance(const double& signedDistance, const double& delta) {
-	double truncatedDistance = 0.0;
+	double truncatedDistance;
+	if (signedDistance > delta) {
+		truncatedDistance = delta;
+	}
+	else if (signedDistance < -delta) {
+		truncatedDistance = -delta;
+	}
+	else {
+		truncatedDistance = signedDistance;
+	}
 	//TODO: Implement the truncated signedDistance function.
 	// Note that signedDistance can be negative here.
 	return truncatedDistance;
