@@ -52,7 +52,7 @@ double SignedDistanceFunction::calculateWeight(const double& signedDistance, con
 		weight = 1.0;
 	}
 	else if (signedDistance < delta) {
-		weight = (delta - signedDistance) * 1, 0 / (delta - epsilon);
+		weight = (delta - signedDistance) * 1.0 / (delta - epsilon);
 	}
 	//TODO calculate the weight according to the current measurement
 	return weight;
