@@ -169,6 +169,7 @@ int main(int /* argc */, char ** /*argv*/) {
 		octree.insertPoint(points[i]);
 	}
 
+
 	const std::string outputFile = packagePath + "/data/result.txt";
 	if (fio.writeToFile(octree, outputFile)) {
 		std::cout << "Wrote " << fio.getNumWritten() << " nodes to " << outputFile << ". " << std::endl;

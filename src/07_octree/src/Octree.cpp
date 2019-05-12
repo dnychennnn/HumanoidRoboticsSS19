@@ -64,6 +64,45 @@ unsigned int Node::findIndex(const Eigen::Vector3d& point) const {
 	 * - const Eigen::Vector3d corner1: first corner of the current cube
 	 * - const Eigen::Vector3d corner2: opposite corner of the current cube
 	 */
+	Eigen::Vector3d origin;
+	origin = (corner1 + corner2) / 2.0;
+
+	if (point(0) <= origin(0)){
+		if(point(1) <= origin(0)){
+			if(point(2) <= origin(2)){
+				index = 0;
+			}else{
+				index = 4;
+			}
+		}else
+		{
+			if(point(2) <= origin(2)){
+				index = 2;
+			}else
+			{
+				index = 6;
+			}
+		}
+	}else{
+		if(point(1) <= origin(1)){
+			if (point(2) <= origin(2)){
+				index = 1;
+			}else
+			{
+				index = 5;
+			}
+			
+		}else
+		{
+			if (point(2) <= origin(2)){
+				index = 3;
+			}else
+			{
+				index = 7;
+			}
+		}
+	}
+	
 	return index;
 }
 
@@ -82,6 +121,7 @@ Node* Octree::findNode(const Eigen::Vector3d& point) const {
 	 * - node->children[8]: the 8 children of the node (all NULL if node is a leaf)
 	 * - node->findIndex(const Eigen::Vector3d& point): method defined above
 	 */
+
 	return result;
 }
 
