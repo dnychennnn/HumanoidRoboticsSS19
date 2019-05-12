@@ -113,7 +113,6 @@ unsigned int Node::findIndex(const Eigen::Vector3d& point) const {
  */
 Node* Octree::findNode(const Eigen::Vector3d& point) const {
 	Node *result = NULL;
-
 	/* TODO: Find and return the leaf node containing the given point.
 	 *
 	 * Available member variables and methods:
@@ -121,7 +120,13 @@ Node* Octree::findNode(const Eigen::Vector3d& point) const {
 	 * - node->children[8]: the 8 children of the node (all NULL if node is a leaf)
 	 * - node->findIndex(const Eigen::Vector3d& point): method defined above
 	 */
-
+	result = root;
+	unsigned int index;
+	index = result->findIndex(point);
+	while (result->children[index] != NULL){
+		result = result->children[index];
+		index = result->findIndex(point);
+	}
 	return result;
 }
 
@@ -132,7 +137,6 @@ Node* Octree::findNode(const Eigen::Vector3d& point) const {
  */
 Node* Node::split(const Eigen::Vector3d& point) {
 	Node *result = NULL;
-
 	/* TODO:
 	 * 1. Set the current node's content to MIXED
 	 * 2. Create 8 child nodes for children[0], ..., children[8].
@@ -154,8 +158,50 @@ Node* Node::split(const Eigen::Vector3d& point) {
 	 * - findIndex(const Eigen::Vector3d& point): method defined above
 	 * - findNode(const Eigen::Vector3d& point): method defined above
 	 */
+	unsigned int index;
+	Eigen::Vector3d dx;
+	Eigen::Vector3d dy;
+	Eigen::Vector3d dz;
+	Eigen::Vector3d centerPoint = (corner1 + corner2)/2.0;
+	Eigen::Vector3d newCorner1;
+	Eigen::Vector3d newCorner2;
+	Eigen::Vector3d deviation = (corner2 - corner1) / 2.0;
 
-
+	this->content = MIXED;
+	for (int i = 0; i<8; i++){
+		switch(i){
+		case 0:
+			newCorner1 = corner1;
+			break;
+		case 1:
+			newCorner1 << centerPoint(0), corner1(1), corner1(2);
+			break;
+		case 2:
+			newCorner1 << corner1(0), centerPoint(1), corner1(2);
+			break;
+		case 3:
+			newCorner1 << centerPoint(0), centerPoint(1), corner1(2);
+			break;
+		case 4:
+			newCorner1 << corner1(0),corner1(1), centerPoint(2);
+			break;
+		case 5:
+			newCorner1 << centerPoint(0),corner1(1), centerPoint(2);
+			break;
+		case 6:
+			newCorner1 << corner1(0), centerPoint(1), centerPoint(2);
+			break;
+		case 7:
+			newCorner1 = centerPoint;
+			break;
+		}
+		// newCorner2 = newCorner1 + dx + dy + dz;
+		newCorner2 = newCorner1 + deviation;
+		children[i] = new Node(newCorner1, newCorner2, this, depth + 1, FREE);
+	}
+	index = findIndex(point);
+	children[index]->content = OCCUPIED;
+	result = children[index];
 	return result;
 }
 
