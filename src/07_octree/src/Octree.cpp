@@ -38,7 +38,6 @@ bool Octree::insertPoint(const Eigen::Vector3d& point) {
 				return false;
 			}
 		}
-		// question: maybe we need node->content = OCCUPIED; here as well? Or set one child's content to occupied while splitting?
 	}
 
 	// Traverse the tree towards the root and merge cells
@@ -114,7 +113,7 @@ unsigned int Node::findIndex(const Eigen::Vector3d& point) const {
  */
 Node* Octree::findNode(const Eigen::Vector3d& point) const {
 	Node *result = NULL;
-	unsigned int index;
+	size_t index;
 	/* TODO: Find and return the leaf node containing the given point.
 	 *
 	 * Available member variables and methods:
@@ -162,7 +161,13 @@ Node* Node::split(const Eigen::Vector3d& point) {
 	 * - findIndex(const Eigen::Vector3d& point): method defined above
 	 * - findNode(const Eigen::Vector3d& point): method defined above
 	 */
+	content = MIXED;
+	for (size_t i = 0; i < 8; i++) {
+		children[i] = new Node(corner1, corner2, this, depth + 1, FREE);
+	}
 
+	result = children[findIndex(point)];
+	result->content = OCCUPIED;
 
 	return result;
 }
