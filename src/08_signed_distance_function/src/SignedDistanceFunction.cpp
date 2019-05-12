@@ -12,8 +12,8 @@ namespace signed_distance_function {
  * \return The Euclidean distance
  */
 double SignedDistanceFunction::calculateDistance(const Eigen::Vector2d& pointA, const Eigen::Vector2d& pointB) {
-	double distance = 0.0;
-	//TODO: Implement the Euclidean distance.
+	Eigen::Vector2d diff = pointA - pointB;
+	double distance = diff.norm();
 	return distance;
 }
 
