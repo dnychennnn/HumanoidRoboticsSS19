@@ -113,6 +113,7 @@ unsigned int Node::findIndex(const Eigen::Vector3d& point) const {
  */
 Node* Octree::findNode(const Eigen::Vector3d& point) const {
 	Node *result = NULL;
+	size_t index;
 	/* TODO: Find and return the leaf node containing the given point.
 	 *
 	 * Available member variables and methods:
@@ -120,13 +121,14 @@ Node* Octree::findNode(const Eigen::Vector3d& point) const {
 	 * - node->children[8]: the 8 children of the node (all NULL if node is a leaf)
 	 * - node->findIndex(const Eigen::Vector3d& point): method defined above
 	 */
+
 	result = root;
-	unsigned int index;
 	index = result->findIndex(point);
-	while (result->children[index] != NULL){
+	while (result->children[index]) { // while pointer not null
 		result = result->children[index];
 		index = result->findIndex(point);
 	}
+
 	return result;
 }
 
@@ -158,50 +160,26 @@ Node* Node::split(const Eigen::Vector3d& point) {
 	 * - findIndex(const Eigen::Vector3d& point): method defined above
 	 * - findNode(const Eigen::Vector3d& point): method defined above
 	 */
-	unsigned int index;
-	Eigen::Vector3d dx;
-	Eigen::Vector3d dy;
-	Eigen::Vector3d dz;
-	Eigen::Vector3d centerPoint = (corner1 + corner2)/2.0;
-	Eigen::Vector3d newCorner1;
-	Eigen::Vector3d newCorner2;
-	Eigen::Vector3d deviation = (corner2 - corner1) / 2.0;
-
-	this->content = MIXED;
-	for (int i = 0; i<8; i++){
-		switch(i){
-		case 0:
-			newCorner1 = corner1;
-			break;
-		case 1:
-			newCorner1 << centerPoint(0), corner1(1), corner1(2);
-			break;
-		case 2:
-			newCorner1 << corner1(0), centerPoint(1), corner1(2);
-			break;
-		case 3:
-			newCorner1 << centerPoint(0), centerPoint(1), corner1(2);
-			break;
-		case 4:
-			newCorner1 << corner1(0),corner1(1), centerPoint(2);
-			break;
-		case 5:
-			newCorner1 << centerPoint(0),corner1(1), centerPoint(2);
-			break;
-		case 6:
-			newCorner1 << corner1(0), centerPoint(1), centerPoint(2);
-			break;
-		case 7:
-			newCorner1 = centerPoint;
-			break;
+	content = MIXED;
+	Eigen::Vector3d origin = (corner1 + corner2) / 2.0;
+	//assume that always corner1(i) < corner2(i)
+	Eigen::Vector3d newcorner1, newcorner2;
+	for (size_t i = 0; i < 8; i++) {
+		for (size_t j = 0; j < 3; j++) {
+			if (i & (1<<j)) {
+				newcorner1(j) = origin(j);
+				newcorner2(j) = corner2(j);
+			}
+			else {
+				newcorner1(j) = corner1(j);
+				newcorner2(j) = origin(j);
+			}
 		}
-		// newCorner2 = newCorner1 + dx + dy + dz;
-		newCorner2 = newCorner1 + deviation;
-		children[i] = new Node(newCorner1, newCorner2, this, depth + 1, FREE);
+		children[i] = new Node(newcorner1, newcorner2, this, depth + 1, FREE);
 	}
-	index = findIndex(point);
-	children[index]->content = OCCUPIED;
-	result = children[index];
+	result = children[findIndex(point)];
+	result->content = OCCUPIED;
+
 	return result;
 }
 
@@ -210,8 +188,8 @@ Node* Node::split(const Eigen::Vector3d& point) {
  * \return True if the children have been merged, false otherwise.
  */
 bool Node::merge() {
-	bool merged = false;
-
+	//bool merged = false;
+	
 	/* TODO:
 	 * 1. Check if the children can be merged
 	 * 2. Set the label of the current node
@@ -224,7 +202,26 @@ bool Node::merge() {
 	 * - const unsigned int depth: depth of the current node within the tree (0 = root node)
 	 */
 
-	return merged;
+	Content cont = children[0]->content;
+
+	if (cont == MIXED) {
+		return false;
+	}
+
+	for (size_t i = 1; i < 8; i++) {
+		if (children[i]->content != cont) {
+			return false;
+		}
+	}
+
+	// if this point is reached, all children have identical content (which is not MIXED) -> merge!
+
+	for (size_t i = 0; i < 8; i++) {
+		delete children[i];
+		children[i] = NULL;
+	}
+	content = cont;
+	return true;
 }
 
 }  // namespace octree

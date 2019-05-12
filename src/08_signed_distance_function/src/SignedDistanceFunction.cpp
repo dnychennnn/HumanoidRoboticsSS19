@@ -12,8 +12,8 @@ namespace signed_distance_function {
  * \return The Euclidean distance
  */
 double SignedDistanceFunction::calculateDistance(const Eigen::Vector2d& pointA, const Eigen::Vector2d& pointB) {
-	double distance = 0.0;
-	//TODO: Implement the Euclidean distance.
+	Eigen::Vector2d diff = pointA - pointB;
+	double distance = diff.norm();
 	return distance;
 }
 
@@ -24,7 +24,16 @@ double SignedDistanceFunction::calculateDistance(const Eigen::Vector2d& pointA, 
  * \return The truncated signed distance.
  */
 double SignedDistanceFunction::truncateDistance(const double& signedDistance, const double& delta) {
-	double truncatedDistance = 0.0;
+	double truncatedDistance;
+	if (signedDistance > delta) {
+		truncatedDistance = delta;
+	}
+	else if (signedDistance < -delta) {
+		truncatedDistance = -delta;
+	}
+	else {
+		truncatedDistance = signedDistance;
+	}
 	//TODO: Implement the truncated signedDistance function.
 	// Note that signedDistance can be negative here.
 	return truncatedDistance;
@@ -39,6 +48,12 @@ double SignedDistanceFunction::truncateDistance(const double& signedDistance, co
  */
 double SignedDistanceFunction::calculateWeight(const double& signedDistance, const double& delta, const double& epsilon) {
 	double weight = 0.0;
+	if (signedDistance < epsilon) {
+		weight = 1.0;
+	}
+	else if (signedDistance < delta) {
+		weight = (delta - signedDistance) * 1.0 / (delta - epsilon);
+	}
 	//TODO calculate the weight according to the current measurement
 	return weight;
 }
@@ -54,7 +69,7 @@ double SignedDistanceFunction::calculateWeight(const double& signedDistance, con
 double SignedDistanceFunction::updateMap(
 		const double& signedDistance, const double& weight,
 		const double& oldSignedDistance, const double& oldWeight) {
-	double newSignedDistance = 0.0;
+	double newSignedDistance = (oldWeight*oldSignedDistance + weight*signedDistance)/(oldWeight+weight);
 	//TODO calculate the new signed distance that will be written into the map
 	return newSignedDistance;
 }
@@ -66,7 +81,7 @@ double SignedDistanceFunction::updateMap(
  * \return The new weight of the map cell.
  */
 double SignedDistanceFunction::updateWeight(const double& weight, const double& oldWeight) {
-	double newWeight = 0.0;
+	double newWeight = oldWeight + weight;
 	//TODO calculate the new weight of the map cell
 	return newWeight;
 }
