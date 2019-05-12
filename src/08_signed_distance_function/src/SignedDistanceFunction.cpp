@@ -81,7 +81,7 @@ double SignedDistanceFunction::updateMap(
  * \return The new weight of the map cell.
  */
 double SignedDistanceFunction::updateWeight(const double& weight, const double& oldWeight) {
-	double newWeight = 0.0;
+	double newWeight = oldWeight + weight;
 	//TODO calculate the new weight of the map cell
 	return newWeight;
 }
