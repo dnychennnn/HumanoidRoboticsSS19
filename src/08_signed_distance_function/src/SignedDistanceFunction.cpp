@@ -69,7 +69,7 @@ double SignedDistanceFunction::calculateWeight(const double& signedDistance, con
 double SignedDistanceFunction::updateMap(
 		const double& signedDistance, const double& weight,
 		const double& oldSignedDistance, const double& oldWeight) {
-	double newSignedDistance = 0.0;
+	double newSignedDistance = (oldWeight*oldSignedDistance + weight*signedDistance)/(oldWeight+weight);
 	//TODO calculate the new signed distance that will be written into the map
 	return newSignedDistance;
 }
