@@ -108,12 +108,11 @@ void SignedDistanceFunction::integrateLaserScan(Eigen::MatrixXd& map, Eigen::Mat
 			if (j < middle_index) {
 				signedDistance *= -1;
 			}
-			signedDistance = truncateDistance(signedDistance, delta);
 			x = (size_t) linepoints[j](0);
 			y = (size_t) linepoints[j](1);
 			weight = calculateWeight(signedDistance, delta, epsilon);
 			if (weight > 0) {
-				map(y, x) = updateMap(signedDistance, weight, map(y, x), weights(y, x));
+				map(y, x) = truncateDistance(updateMap(signedDistance, weight, map(y, x), weights(y, x)),delta);
 				weights(y, x) = updateWeight(weight, weights(y,x));
 			}
 		}		
