@@ -105,7 +105,7 @@ void SignedDistanceFunction::integrateLaserScan(Eigen::MatrixXd& map, Eigen::Mat
 		middle_index = linepoints.size()/2;
 		for (size_t j = 0; j < linepoints.size(); j++) {
 			signedDistance = calculateDistance(linepoints[j], measurement.laserPoints[i]);
-			if (j > middle_index) {
+			if (j < middle_index) {
 				signedDistance *= -1;
 			}
 			x = linepoints[j](0);
