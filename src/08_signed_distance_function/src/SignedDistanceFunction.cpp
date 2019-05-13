@@ -96,6 +96,28 @@ void SignedDistanceFunction::integrateLaserScan(Eigen::MatrixXd& map, Eigen::Mat
 	const double delta = 5.;
 	const double epsilon = 1.;
 	//TODO: Add the information from the new laser scan to the map.
+	auto mpoints = measurement.laserPoints;
+	VectorOfPoints linepoints;
+	double signedDistance, weight;
+	size_t middle_index, x, y;
+
+	for (auto&& mpoint : mpoints) {
+		linepoints = bresenham(measurement.robotPosition, mpoint, map.rows(), map.cols());
+		middle_index = linepoints.size()/2;
+		for (size_t j = 0; j < linepoints.size(); j++) {
+			signedDistance = calculateDistance(linepoints[j], mpoint);
+			if (j < middle_index) {
+				signedDistance *= -1;
+			}
+			x = linepoints[j](0);
+			y = linepoints[j](1);
+			weight = calculateWeight(signedDistance, delta, epsilon);
+			if (weight > 0) {
+				map(y, x) = updateMap(signedDistance, weight, map(y, x), weights(y, x));
+				weights(y, x) = updateWeight(weight, weights(y,x));
+			}
+		}		
+	}
 }
 
 /**
