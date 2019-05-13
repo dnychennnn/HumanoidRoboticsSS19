@@ -102,14 +102,14 @@ void SignedDistanceFunction::integrateLaserScan(Eigen::MatrixXd& map, Eigen::Mat
 
 	for (size_t i = 0; i < measurement.laserPoints.size(); i++) {
 		linepoints = bresenham(measurement.robotPosition, measurement.laserPoints[i], map.rows(), map.cols());
-		middle_index = linepoints.size()/2;
+		middle_index = (size_t) linepoints.size()/2;
 		for (size_t j = 0; j < linepoints.size(); j++) {
 			signedDistance = calculateDistance(linepoints[j], measurement.laserPoints[i]);
-			if (j > middle_index) {
+			if (j < middle_index) {
 				signedDistance *= -1;
 			}
-			x = linepoints[j](0);
-			y = linepoints[j](1);
+			x = (size_t) linepoints[j](0);
+			y = (size_t) linepoints[j](1);
 			weight = calculateWeight(signedDistance, delta, epsilon);
 			if (weight > 0) {
 				map(y, x) = updateMap(signedDistance, weight, map(y, x), weights(y, x));
