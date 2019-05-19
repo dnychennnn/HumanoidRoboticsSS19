@@ -35,6 +35,15 @@ namespace icp
 	{
 		Eigen::Vector2d result(0., 0.);
 		//TODO: Compute the point on the line (pL1-pL2) that is closest to pX.
+		Eigen::Vector2d vector12 = pL2 - pL1;
+		Eigen::Vector2d vector1X = pX - pL1;
+
+		double magnitude12 = distance(pL1, pL2);
+		double dotproduct121X = vector1X.dot(vector12);
+		double distance = dotproduct121X / magnitude12;
+
+		result(1) = pL1(1) + (vector12(1)/magnitude12) *distance;
+		result(0) = pL1(0) + (vector12(0)/magnitude12)*distance;
 
 		return result;
 
@@ -99,7 +108,6 @@ namespace icp
 		Eigen::Matrix3d result = Eigen::Matrix3d::Zero();
 		//TODO: Compute the affine transformation matrix
 
-
 		return result;
 
 	}
@@ -131,7 +139,21 @@ namespace icp
 	double ICP::computeError(const StdVectorOfVector2d& Q, const StdVectorOfVector2d& C, const Eigen::Matrix3d& A)
 	{
 		double result = -1.0;
+		Eigen::Vector3d q_homo;
+		Eigen::Vector2d q;
+		Eigen::Vector2d c;
 		//TODO: Compute the error after the transformation.
+		for(size_t i=0; i < Q.size(); i++){
+			
+			q_homo << C[i][0], C[i][1], 1;
+			c << Q[i][0], Q[i][1];
+			q_homo = A * q_homo;
+			q(0) =  q_homo(0) / q_homo(2);
+			q(1) = q_homo(1) / q_homo(2);
+			std::cout << q_homo << std::endl;	
+			result += distance(c, q);
+			// std::cout << c << "\t" << q << std::endl;	
+		}
 		return result;		
 	}
 
