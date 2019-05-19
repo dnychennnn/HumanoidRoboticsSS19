@@ -41,7 +41,8 @@
         "typeinfo": "cpp",
         "utility": "cpp",
         "optional": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "numeric": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

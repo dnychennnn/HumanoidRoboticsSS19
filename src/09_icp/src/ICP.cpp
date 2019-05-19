@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <math.h>
 #include <Eigen/SVD> 
+#include <numeric>
+
 
 using namespace std;
 namespace icp
@@ -43,8 +45,9 @@ namespace icp
 		double distance = dotproduct121X / magnitude12;
 
 		result(1) = pL1(1) + (vector12(1)/magnitude12) *distance;
-		result(0) = pL1(0) + (vector12(0)/magnitude12)*distance;
+		result(0) = pL1(0) + (vector12(0)/magnitude12) *distance;
 
+		std::cout << vector12 << "\t" << vector1X << std::endl;		 
 		return result;
 
 
@@ -95,6 +98,14 @@ namespace icp
 		return result;
 
 	}
+
+	Eigen::Vector2d calcAvg(const StdVectorOfVector2d& V){
+		Eigen::Vector2d mean;
+		for(size_t i=0; i<V.size();i++){
+			mean += V[i];
+		}
+		return mean/ V.size();
+	}
 /**
  * \brief Compute the affine transformation matrix needed to align the previously computed corresponding points (list C) to the points of list Q.
  * \param[in] Q: A vector of 2D points.
@@ -120,13 +131,20 @@ namespace icp
  * StdVectorOfVector2d is equivalent to std::vector<Eigen::Vector2d>.
  */
 	StdVectorOfVector2d ICP::applyTransformation(const Eigen::Matrix3d& A, const StdVectorOfVector2d& P)
-	{
-		StdVectorOfVector2d  result;
-
-		//TODO: Apply the affine transformation A to the points in list P.
-
-		return result;
-	}
+    {
+        StdVectorOfVector2d  result;
+        Eigen::Vector3d P_H;
+        Eigen::Vector3d AP_H;
+        Eigen::Vector2d AP;
+        //TODO: Apply the affine transformation A to the points in list P.
+        for (int i = 0; i<P.size(); i++){
+            P_H << P[i], 1;
+            AP_H = A*P_H;
+            AP << AP_H(0)/AP_H(2), AP_H(1)/AP_H(2);
+            result.push_back(AP);
+        }
+        return result;
+    }
 /**
  * \brief Compute the error between the points in Q list and the transformed corresponding points.
  * \param[in] Q: A vector of 2D points.
@@ -138,15 +156,16 @@ namespace icp
  */
 	double ICP::computeError(const StdVectorOfVector2d& Q, const StdVectorOfVector2d& C, const Eigen::Matrix3d& A)
 	{
-		double result = -1.0;
+		double result = 0.0;
 		Eigen::Vector3d q_homo;
 		Eigen::Vector2d q;
 		Eigen::Vector2d c;
+
 		//TODO: Compute the error after the transformation.
 		for(size_t i=0; i < Q.size(); i++){
 			
-			q_homo << C[i][0], C[i][1], 1;
-			c << Q[i][0], Q[i][1];
+			q_homo << Q[i], 1;
+			c << C[i];
 			q_homo = A * q_homo;
 			q(0) =  q_homo(0) / q_homo(2);
 			q(1) = q_homo(1) / q_homo(2);
@@ -154,6 +173,7 @@ namespace icp
 			result += distance(c, q);
 			// std::cout << c << "\t" << q << std::endl;	
 		}
+		result = result  / Q.size();
 		return result;		
 	}
 
