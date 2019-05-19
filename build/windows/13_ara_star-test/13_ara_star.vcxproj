@@ -21,9 +21,9 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{215E2DCF-0A4F-420C-BBF1-9B601CBC488F}</ProjectGuid>
     <Keyword>ManagedCProj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -48,24 +48,24 @@
     <PlatformToolset>v141</PlatformToolset>
     <CLRSupport>false</CLRSupport>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)-test</TargetName>
@@ -136,32 +136,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\13_ara_star\src\ARAStar.cpp"/>
-    <ClCompile Include="..\..\..\src\13_ara_star\src\ClosedList.cpp"/>
-    <ClCompile Include="..\..\..\src\13_ara_star\src\FileIO.cpp"/>
-    <ClCompile Include="..\..\..\src\13_ara_star\src\GridNode.cpp"/>
-    <ClCompile Include="..\..\..\src\13_ara_star\src\Logger.cpp"/>
-    <ClCompile Include="..\..\..\src\13_ara_star\src\OpenList.cpp"/>
-    <ClCompile Include="..\..\..\src\13_ara_star\src\PathPlanning.cpp"/>
-    <ClCompile Include="..\..\..\src\13_ara_star\test\test_ara_star.cpp"/>
+    <ClCompile Include="..\..\..\src\13_ara_star\src\ARAStar.cpp" />
+    <ClCompile Include="..\..\..\src\13_ara_star\src\ClosedList.cpp" />
+    <ClCompile Include="..\..\..\src\13_ara_star\src\FileIO.cpp" />
+    <ClCompile Include="..\..\..\src\13_ara_star\src\GridNode.cpp" />
+    <ClCompile Include="..\..\..\src\13_ara_star\src\Logger.cpp" />
+    <ClCompile Include="..\..\..\src\13_ara_star\src\OpenList.cpp" />
+    <ClCompile Include="..\..\..\src\13_ara_star\src\PathPlanning.cpp" />
+    <ClCompile Include="..\..\..\src\13_ara_star\test\test_ara_star.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\AbstractNode.h"/>
-    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\ARAStar.h"/>
-    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\ClosedList.h"/>
-    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\FileIO.h"/>
-    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\GridMap.h"/>
-    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\GridNode.h"/>
-    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\Heuristic.h"/>
-    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\Logger.h"/>
-    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\OpenList.h"/>
-    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\PathPlanning.h"/>
+    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\AbstractNode.h" />
+    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\ARAStar.h" />
+    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\ClosedList.h" />
+    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\FileIO.h" />
+    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\GridMap.h" />
+    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\GridNode.h" />
+    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\Heuristic.h" />
+    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\Logger.h" />
+    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\OpenList.h" />
+    <ClInclude Include="..\..\..\src\13_ara_star\include\ara_star\PathPlanning.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\gtest\gtest.vcxproj">
       <Project>{c48b9253-d77e-4e26-9d26-75e38b5c8e57}</Project>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-  <ImportGroup Label="ExtensionTargets"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

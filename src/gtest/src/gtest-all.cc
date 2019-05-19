@@ -34,6 +34,13 @@
 // Sometimes it's desirable to build Google Test by compiling a single file.
 // This file serves this purpose.
 
+
+
+//#define GTEST_HAS_STD_TUPLE_
+//#define GTEST_HAS_TR1_TUPLE = 0
+#define _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING
+
+
 // This line ensures that gtest.h can be compiled on its own, even
 // when it's fused.
 #include "gtest/gtest.h"
@@ -46,3 +53,5 @@
 #include "src/gtest-printers.cc"
 #include "src/gtest-test-part.cc"
 #include "src/gtest-typed-test.cc"
+
+

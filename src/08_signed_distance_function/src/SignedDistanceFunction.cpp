@@ -98,14 +98,16 @@ void SignedDistanceFunction::integrateLaserScan(Eigen::MatrixXd& map, Eigen::Mat
 	//TODO: Add the information from the new laser scan to the map.
 	VectorOfPoints linepoints;
 	double signedDistance, weight;
-	size_t middle_index, x, y;
+	size_t x, y;
+	bool middle_passed;
 
 	for (size_t i = 0; i < measurement.laserPoints.size(); i++) {
 		linepoints = bresenham(measurement.robotPosition, measurement.laserPoints[i], map.rows(), map.cols());
-		middle_index = (size_t) linepoints.size()/2;
+		middle_passed = false;
 		for (size_t j = 0; j < linepoints.size(); j++) {
 			signedDistance = calculateDistance(linepoints[j], measurement.laserPoints[i]);
-			if (j < middle_index) {
+			middle_passed = middle_passed || (signedDistance == 0); // set the flag to true if signed distance ever becomes 0
+			if (!middle_passed) {
 				signedDistance *= -1;
 			}
 
