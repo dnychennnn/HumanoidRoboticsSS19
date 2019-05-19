@@ -18,6 +18,9 @@ namespace icp
 	{
 		double result = -1.0;
 		//TODO: Calculate the distance between the points.
+		
+		Eigen::Vector2d diff = p1 - p2;
+        result = diff.norm();
 
 		return result;
 	}
@@ -46,9 +49,11 @@ namespace icp
 	{
 		double result = 0.0;
 		//TODO: Find and return the minimum value in the vector dist
-
+		
+		result = *std::min_element(std::begin(dist), std::end(dist));
+		
 		return result;
-	}
+	}	
 /**
  * \brief Compute the corresponding points in list P to those points in list Q, using the 'closest point' matching method.
  * \param[in] Q: A vector of 2D points.
