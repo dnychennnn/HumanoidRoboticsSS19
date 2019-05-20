@@ -15,7 +15,7 @@ namespace icp
  * \param[in] p1: The first 2D point.
  * \param[in] p2: The second 2D point.
  * \return The Euclidean distance between the two input 2D points.
- */
+ */	
 	double ICP::distance(const Eigen::Vector2d& p1, const Eigen::Vector2d& p2)
 	{
 		double result = -1.0;
@@ -62,7 +62,7 @@ namespace icp
 		double result = 0.0;
 		//TODO: Find and return the minimum value in the vector dist
 		
-		result = *std::min_element(std::begin(dist), std::end(dist));
+		result = *std::min_element(dist.begin(), dist.end());
 		
 		return result;
 	}	
