@@ -77,9 +77,21 @@ namespace icp
  */
 	StdVectorOfVector2d ICP::euclideanCorrespondences(const StdVectorOfVector2d& Q, const StdVectorOfVector2d& P)
 	{
+		double dist, mindist;
+		Eigen::Vector2d best;
 		StdVectorOfVector2d result;
+		for (auto itQ = Q.begin(); itQ != Q.end(); ++itQ) {
+			mindist = std::numeric_limits<double>::max();
+			for (auto itP = P.begin(); itP != P.end(); ++itP) {
+				dist = distance(*itQ, *itP);
+				if (dist < mindist){
+					mindist = dist;
+					best = *itP;
+				}
+			}
+			result.push_back(best);
+		}
 		//TODO: Compute corresponding points using the "closest point" method
-
 		return result;
 	}
 /**
