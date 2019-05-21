@@ -125,7 +125,19 @@ std::vector<ParticleFilter::Particle> ParticleFilter::resample(const std::vector
 	std::vector<Particle> newParticles;
 	/*TODO: Use stochastic universal resampling (also called low variance resampling)
 	 * to draw a new set of particles according to the old particles' weights */
-
+	double J = (double) particles.size();
+	double U;
+	double r = fRand(0, 1 / J);
+	double c = particles[0].weight;
+	size_t i = 0;
+	for (size_t j = 0; j < J; j++) {
+		U = r + j / J;
+		while (U > c) {
+			i++;
+			c += particles[i].weight;
+		}
+		newParticles.push_back(particles[i]);
+	}
 
 	return newParticles;
 }
