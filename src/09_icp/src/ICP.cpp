@@ -151,7 +151,7 @@ namespace icp
 		Eigen::Vector2d C_center = calcAvg(C);
 
 		for (size_t i = 0; i < Q.size(); i++) {
-			W += Q[i] * C[i].transpose();
+			W += (Q[i]-Q_center) * (C[i]-C_center).transpose();
 		}
 
 		Eigen::JacobiSVD<Eigen::Matrix2d> svd(W, Eigen::ComputeFullU | Eigen::ComputeFullV);
@@ -160,8 +160,6 @@ namespace icp
 		result.topLeftCorner(2,2) << R;
 		result.topRightCorner(2, 1) << (Q_center -R* C_center);
 		result(2, 2) = 1;
-
-		std::cout << result << std::endl;
 
 		return result;
 
