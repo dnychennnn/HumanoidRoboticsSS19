@@ -19,6 +19,14 @@ double ParticleFilter::gaussianProbability(const double& d, const double& stdev)
 	return probability;
 }
 
+
+double fRand(double fMin, double fMax)
+{
+	double f = (double)rand() / RAND_MAX;
+	return fMin + f * (fMax - fMin);
+}
+
+
 /**
  * \brief Draw a sample from a Gaussian distribution.
  * \param[in] mean The mean of the Gaussian.
@@ -26,7 +34,10 @@ double ParticleFilter::gaussianProbability(const double& d, const double& stdev)
  * \return A random sample drawn from the given Gaussian distribution.
  */
 double ParticleFilter::sampleFromGaussian(const double& mean, const double& stdev) {
-	double result = 0.0;
+	double result = mean;
+	for (size_t i = 1; i <= 12; i++) {
+		result += fRand(-stdev, stdev)/2;
+	}
 	//TODO: draw a sample from a 1D Gaussian
 	return result;
 }
