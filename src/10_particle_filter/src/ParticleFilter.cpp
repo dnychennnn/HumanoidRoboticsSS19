@@ -109,7 +109,9 @@ double ParticleFilter::getDistanceToNearestLight(const double& x) {
 void ParticleFilter::integrateObservation(std::vector<Particle>& particles, const double measurement,
 		const double& stdev) {
 	//TODO: Correction step: weight the samples according to the observation model.
-
+	for (size_t i = 0; i < particles.size(); i++) {
+		particles[i].weight *= gaussianProbability(measurement - getDistanceToNearestLight(particles[i].x), stdev);
+	}
 	// Normalize the weights after updating so that they sum up to 1 again:
 	normalizeWeights(particles);
 }
