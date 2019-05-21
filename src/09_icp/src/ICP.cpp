@@ -47,7 +47,7 @@ namespace icp
 		result(1) = pL1(1) + (vector12(1)/magnitude12) *distance;
 		result(0) = pL1(0) + (vector12(0)/magnitude12) *distance;
 
-		std::cout << vector12 << "\t" << vector1X << std::endl;		 
+		//std::cout << vector12 << "\t" << vector1X << std::endl;		 
 		return result;
 
 
@@ -106,6 +106,21 @@ namespace icp
 	{
 		StdVectorOfVector2d  result;
 		//TODO: Compute corresponding points using the "point-to-line" method
+		double dist, mindist;
+		Eigen::Vector2d linepoint, best;
+
+		for (icp::StdVectorOfVector2d::const_iterator itQ = Q.begin(); itQ != Q.end(); ++itQ) {
+			mindist = std::numeric_limits<double>::max();
+			for (icp::StdVectorOfVector2d::const_iterator itP = P.begin(); itP != P.end()-1; ++itP) {
+				linepoint = closestPointOnLine(*itQ, *itP, *(itP + 1));
+				dist = distance(*itQ, linepoint);
+				if (dist < mindist) {
+					mindist = dist;
+					best = linepoint;
+				}
+			}
+			result.push_back(best);
+		}
 
 		return result;
 
@@ -175,7 +190,6 @@ namespace icp
 			
 			result += pow(distance(Q[i], C_prime[i]), 2);
 		}
-		result = result;
 		return result;		
 	}
 
