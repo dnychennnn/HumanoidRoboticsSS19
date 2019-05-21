@@ -169,23 +169,13 @@ namespace icp
 	double ICP::computeError(const StdVectorOfVector2d& Q, const StdVectorOfVector2d& C, const Eigen::Matrix3d& A)
 	{
 		double result = 0.0;
-		Eigen::Vector3d q_homo;
-		Eigen::Vector2d q;
-		Eigen::Vector2d c;
-
+		StdVectorOfVector2d C_prime = applyTransformation(A, C);
 		//TODO: Compute the error after the transformation.
-		for(size_t i=0; i < Q.size(); i++){
+		for(size_t i =0; i<C_prime.size(); i++){
 			
-			q_homo << Q[i], 1;
-			c << C[i];
-			q_homo = A * q_homo;
-			q(0) =  q_homo(0) / q_homo(2);
-			q(1) = q_homo(1) / q_homo(2);
-			std::cout << q_homo << std::endl;	
-			result += distance(c, q);
-			// std::cout << c << "\t" << q << std::endl;	
+			result += pow(distance(Q[i], C_prime[i]), 2);
 		}
-		result = result  / Q.size();
+		result = result;
 		return result;		
 	}
 
