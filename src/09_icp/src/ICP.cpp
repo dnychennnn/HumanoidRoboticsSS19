@@ -225,9 +225,21 @@ namespace icp
 		StdVectorOfVector2d result;
 		
 		//TODO: Perform one iteration of ICP
+
+		StdVectorOfVector2d C;
+		if (pointToLineFlag) {
+			C = closestPointToLineCorrespondences(Q, P);
+		}
+		else {
+			C = euclideanCorrespondences(Q, P);
+		}
 	
+		Eigen::Matrix3d A = calculateAffineTransformation(Q, C);
+		result = applyTransformation(A, P);
+
 		double error = 0.0;
 		//TODO: Compute the error
+		error = computeError(Q, C, A);
 
 		if (error <= threshold) {
 			convergenceFlag = true;
