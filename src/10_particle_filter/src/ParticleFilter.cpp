@@ -52,6 +52,11 @@ double ParticleFilter::sampleFromGaussian(const double& mean, const double& stde
  */
 void ParticleFilter::initParticles(std::vector<Particle>& particles) {
 	//TODO: Distribute the particles randomly between [0, 10] with equal weights
+	double weight = 1 / (double)particles.size();
+	for (size_t i = 0; i < particles.size(); i++) {
+		particles[i].weight = weight;
+		particles[i].x = fRand(0, 10);
+	}
 }
 
 /**
