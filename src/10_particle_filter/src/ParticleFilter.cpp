@@ -95,7 +95,9 @@ void ParticleFilter::integrateMotion(std::vector<Particle>& particles, const dou
  */
 double ParticleFilter::getDistanceToNearestLight(const double& x) {
 	double dist;
-	dist = fmin(fmin(abs(x - 2.0), abs(x - 6.0)), abs(x - 8.0));
+	dist = abs(x - 2.0);
+	dist = fmin(dist, abs(x - 6.0));
+	dist = fmin(dist, abs(x - 8.0));
 	//TODO Return the distance from the robot's position x to the nearest light source.
 	return dist;
 }
