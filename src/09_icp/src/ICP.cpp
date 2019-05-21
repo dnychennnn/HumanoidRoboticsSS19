@@ -128,6 +128,7 @@ namespace icp
 
 	Eigen::Vector2d calcAvg(const StdVectorOfVector2d& V){
 		Eigen::Vector2d mean;
+		mean << 0, 0;
 		for(size_t i=0; i<V.size();i++){
 			mean += V[i];
 		}
@@ -145,6 +146,22 @@ namespace icp
 	{
 		Eigen::Matrix3d result = Eigen::Matrix3d::Zero();
 		//TODO: Compute the affine transformation matrix
+		Eigen::Matrix2d W = Eigen::Matrix2d::Zero();
+		Eigen::Vector2d Q_center = calcAvg(Q);
+		Eigen::Vector2d C_center = calcAvg(C);
+
+		for (size_t i = 0; i < Q.size(); i++) {
+			W += Q[i] * C[i].transpose();
+		}
+
+		Eigen::JacobiSVD<Eigen::Matrix2d> svd(W, Eigen::ComputeFullU | Eigen::ComputeFullV);
+		Eigen::Matrix2d R = svd.matrixU()*svd.matrixV().transpose();
+
+		result.topLeftCorner(2,2) << R;
+		result.topRightCorner(2, 1) << (Q_center -R* C_center);
+		result(2, 2) = 1;
+
+		std::cout << result << std::endl;
 
 		return result;
 
