@@ -80,9 +80,9 @@ namespace icp
 		double dist, mindist;
 		Eigen::Vector2d best;
 		StdVectorOfVector2d result;
-		for (auto itQ = Q.begin(); itQ != Q.end(); ++itQ) {
+		for (icp::StdVectorOfVector2d::const_iterator itQ = Q.begin(); itQ != Q.end(); ++itQ) {
 			mindist = std::numeric_limits<double>::max();
-			for (auto itP = P.begin(); itP != P.end(); ++itP) {
+			for (icp::StdVectorOfVector2d::const_iterator itP = P.begin(); itP != P.end(); ++itP) {
 				dist = distance(*itQ, *itP);
 				if (dist < mindist){
 					mindist = dist;
