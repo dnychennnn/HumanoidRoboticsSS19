@@ -82,6 +82,9 @@ void ParticleFilter::normalizeWeights(std::vector<Particle>& particles) {
  */
 void ParticleFilter::integrateMotion(std::vector<Particle>& particles, const double& ux, const double& stdev) {
 	//TODO: Prediction step: Update each sample by drawing the a pose from the motion model.
+	for (size_t i = 0; i < particles.size(); i++) {
+		particles[i].x += sampleFromGaussian(ux, stdev);
+	}
 }
 
 
