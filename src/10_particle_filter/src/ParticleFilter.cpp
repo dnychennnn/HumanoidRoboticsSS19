@@ -65,6 +65,13 @@ void ParticleFilter::initParticles(std::vector<Particle>& particles) {
  */
 void ParticleFilter::normalizeWeights(std::vector<Particle>& particles) {
 	//TODO: normalize the particles' weights so that they sum up to 1.
+	double sum = 0;
+	for (size_t i = 0; i < particles.size(); i++) {
+		sum += particles[i].weight;
+	}
+	for (size_t i = 0; i < particles.size(); i++) {
+		particles[i].weight /= sum;
+	}
 }
 
 /**
