@@ -15,6 +15,7 @@ double ParticleFilter::gaussianProbability(const double& d, const double& stdev)
 	double probability = 0.0;
 	/*TODO: Calculate the probability of the measurement for a Gaussian distribution with
 	  the given mean and standard deviation */
+	probability = exp(-pow(d / stdev, 2) / 2) / (stdev * sqrt(2 * M_PI));
 	return probability;
 }
 
