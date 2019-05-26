@@ -13,7 +13,6 @@ double FootstepPlanning::getCosts(const FootstepNode* const currentFootstep, con
 	if (currentFootstep->foot == successorFootstep->foot) {
 		return std::numeric_limits<double>::infinity();
 	}
-
 	double result = 0.0;
 	//TODO: Fill "result" with the costs for moving from the current foot step to the successor foot step
 
@@ -22,7 +21,10 @@ double FootstepPlanning::getCosts(const FootstepNode* const currentFootstep, con
 	 * footstep->y: y position of the footstep
 	 * footstep->theta: orientation of the foot in radians
 	 */
-	return result;
+	double dx = currentFootstep->x - successorFootstep->x;
+	double dy = currentFootstep->y - successorFootstep->y;
+	
+	return std::sqrt(dx*dx + dy*dy);
 }
 
 /**
@@ -36,6 +38,11 @@ double FootstepHeuristic::heuristic(const FootstepNode* const currentFootstep, c
 	/* TODO: Implement the Euclidean distance footstep heuristic.
 	 * The heuristic should only consider the translational distance, the angular difference should not be considered.
 	 */
+
+	double dx = currentFootstep->x - goalFootstep->x;
+	double dy = currentFootstep->y - goalFootstep->y;
+	result = std::sqrt(dx*dx + dy*dy);
+
 	return result;
 }
 
@@ -58,7 +65,7 @@ FootstepNode* FootstepPlanning::executeFootstep(const FootstepNode * const curre
 	 * dx = 0.1, dy = -0.1, dtheta =  0.0 --> step forward with the right foot
 	 * dx = 0,   dy = -0.2, dtheta =  0.0 --> step to the right
 	 * dx = 0,   dy = -0.1, dtheta =  0.1 --> turn the right foot counterclockwise(= inwards)
-	 * dx = 0,   dy ? -0.1, dtheta = -0.1 --> turn the right foot clockwise (= outwards)
+	 * dx = 0,   dy = -0.1, dtheta = -0.1 --> turn the right foot clockwise (= outwards)
 	 */
 
 	/* Available fields and methods:
@@ -71,6 +78,12 @@ FootstepNode* FootstepPlanning::executeFootstep(const FootstepNode * const curre
 	 *
 	 * FootstepNode::get(x, y, theta, action.foot): Create a new foot step with the given world coordinates
 	 */
+
+	x = currentFootstep->x + action.dx;
+	y = currentFootstep->y + action.dy;
+	theta = currentFootstep->theta + action.dtheta;
+	std::cout << x << y << theta<<std::endl;
+
 
 	return FootstepNode::get(x, y, theta, action.foot);
 }
