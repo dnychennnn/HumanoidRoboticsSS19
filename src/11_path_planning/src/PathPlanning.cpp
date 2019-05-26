@@ -10,8 +10,6 @@ namespace path_planning {
  * @return The costs (i.e., the Euclidean distance) for traveling from currentNode to successorNode.
  */
 double GridPathPlanning::getCosts(const GridNode * const currentNode, const GridNode * const successorNode) const {
-	double result = 0.0;
-
 	/* TODO: calculate the costs for traveling from currentNode to successorNode
 	 * (= Euclidean distance between the two grid cells) */
 
@@ -19,9 +17,10 @@ double GridPathPlanning::getCosts(const GridNode * const currentNode, const Grid
 	 * - node->x: the x index of the cell
 	 * - node->y: the y index of the cell
 	 */
+	double dx = currentNode->x - successorNode->x;
+	double dy = currentNode->y - successorNode->y;
 
-
-	return result;
+	return std::sqrt(dx*dx + dy*dy);
 }
 
 
@@ -41,9 +40,10 @@ double StraightLineDistanceHeuristic::heuristic(const GridNode* const currentNod
 	 * - node->x: the x index of the cell
 	 * - node->y: the y index of the cell
 	 */
+	double dx = currentNode->x - goalNode->x;
+	double dy = currentNode->y - goalNode->y;
 
-
-	return result;
+	return std::sqrt(dx*dx + dy*dy);
 }
 
 /**
@@ -62,9 +62,10 @@ double ManhattanDistanceHeuristic::heuristic(const GridNode* const currentNode, 
 	 * - node->x: the x index of the cell
 	 * - node->y: the y index of the cell
 	 */
+	double dx = std::abs(currentNode->x - goalNode->x);
+	double dy = std::abs(currentNode->y - goalNode->y);
 
-
-	return result;
+	return dx + dy;
 }
 
 /**
@@ -88,11 +89,31 @@ std::vector<AbstractNode *> GridPathPlanning::getNeighborNodes(const GridNode * 
 	 * - map.isOccupied(int x, int y): returns true iff the cell is occupied by an obstacle
 	 * - GridNode::get(int x, int y): creates and returns a new node representing a cell.
 	 */
+	int next_x; // the index of next neighbor that is going to be add to the queue
+	int next_y;
 
+	for (int i = -1; i <= 1 ; i++){
+		for (int j = -1; j <= 1; j++){
+			if (i==0 && j == 0)
+				continue; // exclude currentNode
+			next_x = currentNode->x + j;
+			next_y = currentNode->y + i;
+			if (next_x < map.width && next_y < map.height && !map.isOccupied(next_x, next_y))
+				result.push_back(GridNode::get(next_x, next_y));
+		}
+	}
 
 	return result;
 }
 
+
+/**
+ * @brief Expands the current node and adds its neighbor cells to the list of open cells.
+ * @param[in] currentNode The current node.
+ * @param[in] goalNode The goal node where the robot should travel to.
+ * @param[in,out] openList The list of open nodes.
+ * @param[in] closedList The list of nodes that are already visited and closed by the algorithm.
+ */
 
 /**
  * @brief Expands the current node and adds its neighbor cells to the list of open cells.
@@ -125,8 +146,38 @@ void PathPlanning::expandNode(const AbstractNode * const currentNode, const Abst
 	 *     already in the open list queue.
 	 * - openList.contains(AbstractNode* node): returns true if the node is already on the list of open nodes.
 	 */
+	std::vector<AbstractNode*> neighbors = getNeighborNodes(currentNode);
+	path_planning::AbstractNode * neighbor;
+	double costFromStartToGoal;
+	double costFromCurrentToNeighbor;
+	double costFromNeighborToGoal;
+
+	for(int i = 0; i<neighbors.size(); i++) {
+		neighbor = neighbors[i];
+
+		if (!closedList.contains(neighbor)){
+			costFromCurrentToNeighbor = getCosts(currentNode, neighbor);
+			costFromNeighborToGoal = heuristic(neighbor, goalNode);
+			costFromStartToGoal = currentNode->costs + costFromCurrentToNeighbor + costFromNeighborToGoal;
+			if (openList.contains(neighbor)){
+				if (costFromStartToGoal < neighbor->costs + costFromNeighborToGoal){
+					openList.updateCosts(neighbor, costFromStartToGoal);
+					neighbor->setPredecessor(currentNode);
+					neighbor->costs = currentNode->costs + costFromCurrentToNeighbor;
+				}else
+					continue;
+			}
+			else{
+				openList.enqueue(neighbor, costFromStartToGoal);
+				neighbor->costs = currentNode->costs + costFromCurrentToNeighbor;
+				neighbor->setPredecessor(currentNode);
+			}
+		}
+	}
+
 
 }
+
 
 /**
  * @brief Returns true if the current node is close to the goal node.
@@ -168,7 +219,21 @@ std::deque<const AbstractNode*> PathPlanning::planPath(const AbstractNode * cons
      * - followPath(AbstractNode* node): defined below, extracts the path from the start node
      *     to the current node by following the chain of predecessors.
    	 */
+	const AbstractNode* currentNode;
+	
+	openList.enqueue(startNode, heuristic(startNode, goalNode));
 
+	do{
+		currentNode = openList.removeMin();
+		expandNode(currentNode, goalNode, openList, closedList);
+
+		if(!closedList.contains(currentNode)){
+			closedList.add(currentNode);
+		}
+
+	} while(isCloseToGoal(currentNode,goalNode) != true);
+
+	resultPath = followPath(currentNode);
 
 	return resultPath;
 }
@@ -189,7 +254,12 @@ std::deque<const AbstractNode*> PathPlanning::followPath(const AbstractNode * co
 	 * - path.push_front(AbstractNode* node): Inserts the node at the beginning of the path
 	 * - path.push_back(AbstractNode* node): Inserts the node at the end of the path
 	 */
-
+	const AbstractNode* currentNode = node;
+	path.push_back(node);
+	while(currentNode->getPredecessor()!=NULL){
+		path.push_front(currentNode->getPredecessor());
+		currentNode = currentNode->getPredecessor();
+	}
 
 	return path;
 }

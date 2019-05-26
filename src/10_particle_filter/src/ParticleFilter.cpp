@@ -121,7 +121,8 @@ void ParticleFilter::integrateObservation(std::vector<Particle>& particles, cons
 /**
  * \brief Resamples the particle set by throwing out unlikely particles and duplicating more likely ones.
  * \param[in] particles The old list of particles.
- * \return The new list of particles after resampling.
+ * \return T
+ * he new list of particles after resampling.
  */
 std::vector<ParticleFilter::Particle> ParticleFilter::resample(const std::vector<Particle>& particles) {
 	std::vector<Particle> newParticles;
