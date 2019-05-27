@@ -79,11 +79,9 @@ FootstepNode* FootstepPlanning::executeFootstep(const FootstepNode * const curre
 	 * FootstepNode::get(x, y, theta, action.foot): Create a new foot step with the given world coordinates
 	 */
 
-	x = currentFootstep->x + action.dx;
-	y = currentFootstep->y + action.dy;
+	x = currentFootstep->x + cos(currentFootstep->theta)*action.dx + sin(currentFootstep->theta)*action.dy;
+	y = currentFootstep->y + cos(currentFootstep->theta) * action.dy - sin(currentFootstep->theta) * action.dx;
 	theta = currentFootstep->theta + action.dtheta;
-	std::cout << x << y << theta<<std::endl;
-
 
 	return FootstepNode::get(x, y, theta, action.foot);
 }
