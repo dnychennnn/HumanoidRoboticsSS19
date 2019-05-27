@@ -107,6 +107,13 @@ std::vector<AbstractNode*> FootstepPlanning::getNeighborNodes(const FootstepNode
 	 *     for a given footstep and action, defined above
 	 * isColliding(FootstepNode *footstep): Returns true if the footstep collides with the environment.
 	 */
+	FootstepNode* newStep;
+	for (size_t i = 0; i < footstepActions.size(); i++) {
+		newStep = executeFootstep(currentFootstep, footstepActions[i]);
+		if (!isColliding(newStep)) {
+			neighborNodes.push_back(newStep);
+		}
+	}
 
 
 	return neighborNodes;
