@@ -21,9 +21,13 @@ double ARAStarHeuristic::heuristic(
 	 * - node->y: the y index of the cell
 	 * - getW(): the current w value of ARA*
 	 */
+	
+	double dx = currentNode->x - goalNode->x;
+	double dy = currentNode->y - goalNode->y;
+	result = std::sqrt(dx*dx + dy*dy);	
+	double w = getW();
 
-
-	return result;
+	return w*result;
 }
 
 /**
