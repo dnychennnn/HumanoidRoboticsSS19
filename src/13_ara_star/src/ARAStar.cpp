@@ -61,7 +61,26 @@ std::deque<const AbstractNode*> ARAStarPlanning::planPath(
    	/* Available methods: all of the methods available in PathPlanning::planPath (exercise 11) plus:
    	 * - difftime(time(0), tstart): returns the time elapsed since tstart in seconds.
    	 */
+	const AbstractNode* currentNode;
+	// const GridNode* startGNode = (Grid)startNode;
+	// const GridNode* goalGNode = goalNode;
 
+	openList.enqueue(startNode, heuristic_.heuristic((GridNode*)startNode, (GridNode*)goalNode));
+	
+
+	do{
+		currentNode = openList.removeMin();
+		expandNode(currentNode, goalNode, openList, closedList);
+
+		if(!closedList.contains(currentNode)){
+			closedList.add(currentNode);
+		}
+	} while(isCloseToGoal(currentNode,goalNode) != true);
+
+	if (difftime(time(0), tstart) <= timeLimit){
+		resultPath = followPath(currentNode);
+	}
+	
 
 	return resultPath;
 }
@@ -79,7 +98,6 @@ std::deque<const AbstractNode*>  ARAStarPlanning::runARA(const double& wInitial,
 	std::deque<const AbstractNode*> resultPath;
 
 	const time_t tstart = time(0);
-
 	/*
 	 * TODO: Implement the ARA* algorithm.
 	 */
@@ -90,10 +108,16 @@ std::deque<const AbstractNode*>  ARAStarPlanning::runARA(const double& wInitial,
 	 * - planPath(startNode, goalNode, tstart, timeLimit): Runs the planning method that you implemented above.
 	 * - difftime(time(0), tstart): returns the ellapsed time in seconds.
 	 */
+	double weight = wInitial;
+	heuristic_.setW(weight);
+	while(difftime(time(0), tstart) < timeLimit && heuristic_.getW()>1.0){
+		weight = weight - wDelta;
+		heuristic_.setW(weight);
+		resultPath = planPath(startNode, goalNode, tstart, timeLimit);
+	}
 
 	return resultPath;
 
-
-}
+}	
 
 }
