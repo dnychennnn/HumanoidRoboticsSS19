@@ -64,7 +64,6 @@ EndeffectorPose InverseKinematics_2Links::forwardKinematic(const JointAngles& q)
 	EndeffectorPose e = Eigen::VectorXd::Zero(2);
 	// TODO: Calculate the forward kinematics.
 
-	
 	/* Use the class member variables a0, a1, and h for the lengths given on the exercise sheet. */
 	Eigen::Vector3d v;
 	v << h, 0, 1;
@@ -106,7 +105,7 @@ EndeffectorPose InverseKinematics::chooseStep(const EndeffectorPose& e, const En
 
 	
 	/* The step size alpha is given as a class member variable. */
-	delta_e = alpha*(e - g);
+	delta_e = alpha*(g - e);
 
 	return delta_e;
 }
@@ -127,6 +126,8 @@ JointAngles InverseKinematics::computeJointChange(const EndeffectorPose& delta_e
 	 * - jacobian.inverse(): Exact solution, but sensitive to singularities
 	 * - pseudoInverse(jacobian): Returns the Moore-Penrose pseudoinverse, approximate solution, but more robust to singularities
 	 */
+	delta_q = pseudoInverse(jacobian) * delta_e;
+
 	return delta_q;
 }
 
@@ -139,6 +140,8 @@ JointAngles InverseKinematics::computeJointChange(const EndeffectorPose& delta_e
 JointAngles InverseKinematics::applyChangeToJoints(const JointAngles& q, const JointAngles& delta_q) const {
 	JointAngles q_new = Eigen::VectorXd::Zero(q.size());
 	// TODO: Calculate the new joint angles.
+	q_new = q + delta_q;
+
 	return q_new;
 }
 
@@ -153,6 +156,14 @@ void InverseKinematics::oneIteration(JointAngles& q, EndeffectorPose& e, const E
 	 * using the methods defined above to compute the new joint angles q and
 	 * endeffector pose e.
 	 */
+	EndeffectorPose delta_e;
+	JointAngles delta_q;
+	
+	delta_e = chooseStep(e, g);
+	delta_q = pseudoInverse(jacobian(q)) * delta_e;
+
+	q = applyChangeToJoints(q, delta_q);
+	e = forwardKinematic(q);
 }
 
 /**
@@ -166,6 +177,14 @@ JointAngles InverseKinematics_2Links::computeIK(const EndeffectorPose& g, const 
 	/* TODO: Initialize q appropriately and call the oneIteration() method
 	 * from above in a while loop.
 	 */
+	q(0) = std::rand();
+	q(1) = std::rand();
+	EndeffectorPose e = forwardKinematic(q);
+
+	while ((g-e).norm() > maxTranslationalError){
+		oneIteration(q, e, g);
+	}
+	
 	return q;
 }
 
@@ -183,6 +202,14 @@ JointAngles InverseKinematics_2Links::computeIK(const EndeffectorPose& g, const 
 EndeffectorPose InverseKinematics_3Links::forwardKinematic(const JointAngles& q) const {
 	EndeffectorPose e = Eigen::VectorXd::Zero(3);
 	/* TODO: Calculate the endeffector pose e = (e_x, e_y, e_theta) */
+	Eigen::Vector3d v;
+	v << h, 0, 1;
+
+	Eigen::Vector3d e_hom;
+	e_hom = rotation(q(0))*translation(a0,0)*rotation(q(1))*translation(a1,0)*rotation(q(2))*translation(a2,0)*v;
+	e(0) = e_hom(0);
+	e(1) = e_hom(1);
+	e(2) = q(0) + q(1) +q(2);
 	return e;
 }
 
@@ -201,6 +228,18 @@ Jacobian InverseKinematics_3Links::jacobian(const JointAngles& q) const {
 	 * as described on the exercise sheet.
 	 */
 
+	Eigen::Vector3d q_eps;
+	Eigen::Vector3d jacobian_column;
+
+	for(int i = 0; i < 2; i++){
+		q_eps = q;
+		q_eps(i) += epsilon;
+		jacobian_column = (forwardKinematic(q_eps)-forwardKinematic(q))/epsilon;
+		result(i,0) = jacobian_column(0);
+		result(i,1) = jacobian_column(1);
+		result(i,2) = jacobian_column(2);
+	}
+
 	return result;
 }
 
@@ -217,6 +256,20 @@ JointAngles InverseKinematics_3Links::computeIK(const EndeffectorPose& g, const 
 	/* TODO: Initialize q appropriately and call the oneIteration() method
 	 * from above in a while loop.
 	 */
+	q(0) = std::rand();
+	q(1) = std::rand();
+	q(2) = std::rand();
+	EndeffectorPose e = forwardKinematic(q);
+	
+	Eigen::Vector2d g_trans;
+	Eigen::Vector2d e_trans;
+	g_trans << g(0), g(1);
+	e_trans << e(0), e(1);
+
+	while ((g_trans-e_trans).norm() > maxTranslationalError && abs(g(2)-e(2)) > maxAngularError){
+		oneIteration(q, e, g);
+		e_trans << e(0), e(1);
+	}
 
 	return q;
 }
