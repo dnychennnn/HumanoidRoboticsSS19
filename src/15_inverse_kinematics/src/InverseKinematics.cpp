@@ -64,7 +64,15 @@ EndeffectorPose InverseKinematics_2Links::forwardKinematic(const JointAngles& q)
 	EndeffectorPose e = Eigen::VectorXd::Zero(2);
 	// TODO: Calculate the forward kinematics.
 
+	
 	/* Use the class member variables a0, a1, and h for the lengths given on the exercise sheet. */
+	Eigen::Vector3d v;
+	v << h, 0, 1;
+
+	Eigen::Vector3d e_hom;
+	e_hom = rotation(q(0))*translation(a0,0)*rotation(q(1))*translation(a1,0)*v;
+	e(0) = e_hom(0);
+	e(1) = e_hom(1);
 
 	return e;
 }
@@ -79,7 +87,8 @@ Jacobian InverseKinematics_2Links::jacobian(const JointAngles& q) const {
 	/* TODO: Fill in the Jacobian that you calculated by hand. */
 
 	/* Use the class member variables a0, a1, and h for the lengths given on the exercise sheet. */
-
+	result << -a0*sin(q(0))-(a1+h)*(sin(q(0))*cos(q(1))+cos(q(0))*sin(q(1))), -(a1+h)*(cos(q(0))*sin(q(1))+sin(q(0))*cos(q(1))),
+			   a0*cos(q(0))+(a1+h)*(cos(q(0))*cos(q(1))-sin(q(0))*sin(q(1))),  (a1+h)*(-sin(q(0))*sin(q(1))+cos(q(0))*cos(q(1)));
 
 	return result;
 }
@@ -95,7 +104,9 @@ EndeffectorPose InverseKinematics::chooseStep(const EndeffectorPose& e, const En
 
 	/* TODO: Choose the small step of the endeffector towards the goal (delta_e). */
 
+	
 	/* The step size alpha is given as a class member variable. */
+	delta_e = alpha*(e - g);
 
 	return delta_e;
 }
