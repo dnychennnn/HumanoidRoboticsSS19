@@ -210,6 +210,7 @@ EndeffectorPose InverseKinematics_3Links::forwardKinematic(const JointAngles& q)
 	e(0) = e_hom(0);
 	e(1) = e_hom(1);
 	e(2) = q(0) + q(1) +q(2);
+
 	return e;
 }
 
@@ -221,6 +222,7 @@ EndeffectorPose InverseKinematics_3Links::forwardKinematic(const JointAngles& q)
 Jacobian InverseKinematics_3Links::jacobian(const JointAngles& q) const {
 	Jacobian result = Eigen::MatrixXd::Zero(3, 3);
 	const double epsilon = 1e-7;
+	JointAngles qEps = Eigen::VectorXd::Zero(3);
 
 	/* TODO: Approximate the Jacobian using the quotient of differences method.
 	 * Add the epsilon defined above to the components of q and call forwardKinematic()
@@ -231,7 +233,7 @@ Jacobian InverseKinematics_3Links::jacobian(const JointAngles& q) const {
 	Eigen::Vector3d q_eps;
 	Eigen::Vector3d jacobian_column;
 
-	for(int i = 0; i < 2; i++){
+	for(int i = 0; i < 3; i++){
 		q_eps = q;
 		q_eps(i) += epsilon;
 		jacobian_column = (forwardKinematic(q_eps)-forwardKinematic(q))/epsilon;
@@ -256,9 +258,10 @@ JointAngles InverseKinematics_3Links::computeIK(const EndeffectorPose& g, const 
 	/* TODO: Initialize q appropriately and call the oneIteration() method
 	 * from above in a while loop.
 	 */
-	q(0) = std::rand();
-	q(1) = std::rand();
-	q(2) = std::rand();
+
+	q(0) = 1.0;
+	q(1) = 1.0;
+	q(2) = 1.0;
 	EndeffectorPose e = forwardKinematic(q);
 	
 	Eigen::Vector2d g_trans;
@@ -266,7 +269,7 @@ JointAngles InverseKinematics_3Links::computeIK(const EndeffectorPose& g, const 
 	g_trans << g(0), g(1);
 	e_trans << e(0), e(1);
 
-	while ((g_trans-e_trans).norm() > maxTranslationalError && abs(g(2)-e(2)) > maxAngularError){
+	while ( ((g_trans-e_trans).norm() > maxTranslationalError) || (abs(g(2)-e(2)) > maxAngularError )){
 		oneIteration(q, e, g);
 		e_trans << e(0), e(1);
 	}
