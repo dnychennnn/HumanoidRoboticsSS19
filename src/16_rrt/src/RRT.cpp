@@ -3,6 +3,7 @@
 #include <cmath>
 #include <limits>
 #include <algorithm>
+#include <iostream>
 
 namespace rrt {
 
@@ -23,6 +24,19 @@ AbstractNode * RRTGrid::getRandomNode(const std::vector<AbstractNode *>& list, A
 	 * - map.isOccupied(int x, int y): returns true iff the cell is occupied by an obstacle
 	 * - GridNode::get(int x, int y): creates and returns a new node representing a cell.
 	 */
+	int x = 0;
+	int y = 0;
+
+	if(std::rand() / (RAND_MAX + 1.0) < 0.9){
+		do{
+			x = std::rand() % map.width;
+			y = std::rand() % map.width;
+			randomNode = GridNode::get(x, y);
+		} while ((map.isOccupied(x,y) == true) || (std::find(list.begin(), list.end(), randomNode) != list.end()));
+	}
+	else{
+		randomNode = listGoal;
+	}
 
 	return randomNode;
 }
@@ -42,6 +56,9 @@ double RRTGrid::distance(GridNode * const node1, GridNode * const node2) const {
 	 * - node->x: the x index of the cell
 	 * - node->y: the y index of the cell
 	 */
+	double dx = node1->x - node2->x;
+	double dy = node1->y - node2->y;
+	dist = sqrt( dx*dx + dy*dy);
 
 	return dist;
 }
@@ -60,8 +77,16 @@ AbstractNode * RRT::getClosestNodeInList(AbstractNode * const node, const std::v
 	/* Available methods:
 	 * - distance(node1, node2): Defined above, returns the Euclidean distance
 	 */
-
-
+	if(!list.empty()){
+		double dist = distance(node, list[0]);
+		nearestNode = list[0];
+		for(int i = 0; i < list.size(); i++){
+			if(distance(node, list[i]) < dist){
+				dist = distance(node, list[i]);
+				nearestNode = list[i];
+			}
+		}
+	}
 	return nearestNode;
 }
 
@@ -85,6 +110,20 @@ std::vector<AbstractNode*> RRTGrid::getNeighbors(GridNode * const currentNode, c
 	 * - map.isOccupied(int x, int y): returns true iff the cell is occupied by an obstacle
 	 * - GridNode::get(int x, int y): creates and returns a new node representing a cell.
 	 */
+
+	int next_x;
+	int next_y;
+
+	for (int i = -1; i <= 1 ; i++){
+		for (int j = -1; j <= 1; j++){
+			if (i==0 && j == 0)
+				continue; // exclude currentNode
+			next_x = currentNode->x + j;
+			next_y = currentNode->y + i;
+			if (next_x < map.width && next_y < map.height && !map.isOccupied(next_x, next_y) && !(std::find(list.begin(), list.end(), GridNode::get(next_x, next_y)) != list.end()))
+				neighbors.push_back(GridNode::get(next_x, next_y));
+		}
+	}
 
 	return neighbors;
 }
@@ -110,6 +149,12 @@ AbstractNode * RRT::tryToConnect(AbstractNode* const currentNode,
 	 * - node->setConnection(AbstractNode * connection): sets the other predecessor node of the
 	 *      current node (must be from the other list) (i.e. set connection between the two lists).
 	 */
+	for(int i=0; i < neighbors.size(); i++){
+		if(std::find(otherList.begin(), otherList.end(), neighbors[i]) != otherList.end()){
+			neighbors[i]->setConnection(currentNode);
+			connectionNode = neighbors[i];
+		}	
+	}
 
 	return connectionNode;
 }
@@ -134,7 +179,7 @@ void RRT::addNearestNeighbor(AbstractNode* const currentNode, std::vector<Abstra
 	 *     later for extracting the path)
 	 * - getClosestNodeInList(node, list): Defined above
 	 */
-
+	
 }
 
 /**
