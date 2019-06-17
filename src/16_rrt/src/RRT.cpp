@@ -168,18 +168,22 @@ AbstractNode * RRT::tryToConnect(AbstractNode* const currentNode,
  * \param[in,out] list The list of already expanded nodes.
  */
 void RRT::addNearestNeighbor(AbstractNode* const currentNode, std::vector<AbstractNode*>& neighbors,
-		AbstractNode* const randomNode, std::vector<AbstractNode*>& list) const {
+	AbstractNode* const randomNode, std::vector<AbstractNode*>& list) const {
 
 	/* TODO: Determine the neighbor that is closest to the random node, set its predecessor
 	 * to the current node, and add it to the list of explored nodes.
 	 */
 
-	/* Available methods and fields:
-	 * - node->setPredecessor(AbstractNode* node): store the predecessor node for a node (required
-	 *     later for extracting the path)
-	 * - getClosestNodeInList(node, list): Defined above
-	 */
-	
+	 /* Available methods and fields:
+	  * - node->setPredecessor(AbstractNode* node): store the predecessor node for a node (required
+	  *     later for extracting the path)
+	  * - getClosestNodeInList(node, list): Defined above
+	  */
+
+	AbstractNode* closest = getClosestNodeInList(randomNode, neighbors);
+	closest->setPredecessor(currentNode);
+	list.push_back(closest);
+
 }
 
 /**
@@ -189,8 +193,8 @@ void RRT::addNearestNeighbor(AbstractNode* const currentNode, std::vector<Abstra
  * @param[in] otherList The other list that should NOT be modified.
  * @return REACHED, TRAPPED, or EXTENDED.
  */
-RRT::ExtendStepReturnValue RRT::extendClosestNode(AbstractNode * randomNode,
-		std::vector<AbstractNode *> & list, const std::vector<AbstractNode *> & otherList) {
+RRT::ExtendStepReturnValue RRT::extendClosestNode(AbstractNode* randomNode,
+	std::vector<AbstractNode*>& list, const std::vector<AbstractNode*>& otherList) {
 
 	// Nothing to do in this method - we've already implemented it for you :-)
 
@@ -200,10 +204,10 @@ RRT::ExtendStepReturnValue RRT::extendClosestNode(AbstractNode * randomNode,
 	}
 
 	// Find the node in the list that is closest to the given random node
-	AbstractNode * const closestNode = getClosestNodeInList(randomNode, list);
+	AbstractNode* const closestNode = getClosestNodeInList(randomNode, list);
 
 	// Get the neighbors of the closest node that can be reached in one step
-	std::vector<AbstractNode *> neighbors = getNeighbors(closestNode, list);
+	std::vector<AbstractNode*> neighbors = getNeighbors(closestNode, list);
 
 	// Does one of the neighbor nodes connect the two lists?
 	connectionNode = tryToConnect(closestNode, neighbors, otherList);
@@ -212,10 +216,12 @@ RRT::ExtendStepReturnValue RRT::extendClosestNode(AbstractNode * randomNode,
 		// Yes: We found a connection between the two lists and connectionNode is the
 		// neighbor that connects the two lists.
 		return REACHED;
-	} else if (neighbors.empty()) {
+	}
+	else if (neighbors.empty()) {
 		// There are no valid neighbor nodes: We are trapped in a dead end.
 		return TRAPPED;
-	} else {
+	}
+	else {
 		// Extend the list by adding the neighbor that is closest to the random node.
 		addNearestNeighbor(closestNode, neighbors, randomNode, list);
 		return EXTENDED;
@@ -229,12 +235,12 @@ RRT::ExtendStepReturnValue RRT::extendClosestNode(AbstractNode * randomNode,
  * \param[in] goalNode The goal node.
  * \return The path from the start node to the goal node.
  */
-std::deque<AbstractNode *> RRT::constructPath(
-        AbstractNode * const connectionNode, 
-        AbstractNode * const startNode,
-		AbstractNode * const goalNode) const 
+std::deque<AbstractNode*> RRT::constructPath(
+	AbstractNode* const connectionNode,
+	AbstractNode* const startNode,
+	AbstractNode* const goalNode) const
 {
-	std::deque<AbstractNode *> path;
+	std::deque<AbstractNode*> path;
 	if (connectionNode == NULL) {
 		return path;
 	}
@@ -247,14 +253,35 @@ std::deque<AbstractNode *> RRT::constructPath(
 	 *   the order of the nodes in the end.
 	 * */
 
-	/* Available methods:
-	 * - node->getPredecessor(): returns the predecessor saved with setPredecessor()
-	 * - node->getConnection() : returns the predecessor from the other list saved with setConnection()
-	 * - path.push_front(AbstractNode* node): Inserts the node at the beginning of the path
-	 * - path.push_back(AbstractNode* node): Inserts the node at the end of the path
-	 */
+	 /* Available methods:
+	  * - node->getPredecessor(): returns the predecessor saved with setPredecessor()
+	  * - node->getConnection() : returns the predecessor from the other list saved with setConnection()
+	  * - path.push_front(AbstractNode* node): Inserts the node at the beginning of the path
+	  * - path.push_back(AbstractNode* node): Inserts the node at the end of the path
+	  */
+	bool reverse_flag;
+
+	AbstractNode* currentNode = connectionNode;
+	while ((currentNode != startNode) && (currentNode != goalNode)){
+		path.push_back(currentNode);
+		currentNode = currentNode->getPredecessor();
+	}
+	path.push_back(currentNode);
+	reverse_flag = (currentNode == startNode);
+
+	currentNode = connectionNode->getConnection();
+	while ((currentNode != startNode) && (currentNode != goalNode)) {
+		path.push_front(currentNode);
+		currentNode = currentNode->getPredecessor();
+	}
+	path.push_front(currentNode);
+
+	if (reverse_flag) {
+		std::reverse(path.begin(),path.end());
+	}
 
 	return path;
+
 }
 
 /**
