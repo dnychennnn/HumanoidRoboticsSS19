@@ -5,7 +5,7 @@
 namespace ara_star {
 
 /**
- * @brief ARA* heuristic.
+ * @brief ARA* heuristic.	
  * @param currentNode The current grid cell.
  * @param goalNode The goal grid cell.
  * @return The heuristic value.
@@ -75,12 +75,14 @@ std::deque<const AbstractNode*> ARAStarPlanning::planPath(
 		if(!closedList.contains(currentNode)){
 			closedList.add(currentNode);
 		}
+
+
 	} while(isCloseToGoal(currentNode,goalNode) != true);
 
-	if (difftime(time(0), tstart) <= timeLimit){
+
+	if (difftime(time(0), tstart) <= timeLimit) {
 		resultPath = followPath(currentNode);
 	}
-	
 
 	return resultPath;
 }
