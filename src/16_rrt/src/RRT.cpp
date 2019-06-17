@@ -80,7 +80,7 @@ AbstractNode * RRT::getClosestNodeInList(AbstractNode * const node, const std::v
 	if(!list.empty()){
 		double dist = distance(node, list[0]);
 		nearestNode = list[0];
-		for(int i = 0; i < list.size(); i++){
+		for(int i = 1; i < list.size(); i++){
 			if(distance(node, list[i]) < dist){
 				dist = distance(node, list[i]);
 				nearestNode = list[i];
@@ -179,7 +179,9 @@ void RRT::addNearestNeighbor(AbstractNode* const currentNode, std::vector<Abstra
 	 *     later for extracting the path)
 	 * - getClosestNodeInList(node, list): Defined above
 	 */
-	
+	AbstractNode* closest_neighbor = getClosestNodeInList(randomNode, getNeighbors(currentNode, list));
+	closest_neighbor->setPredecessor(currentNode);
+	list.push_back(closest_neighbor);
 }
 
 /**
@@ -253,6 +255,25 @@ std::deque<AbstractNode *> RRT::constructPath(
 	 * - path.push_front(AbstractNode* node): Inserts the node at the beginning of the path
 	 * - path.push_back(AbstractNode* node): Inserts the node at the end of the path
 	 */
+	path.push_back(connectionNode);
+	AbstractNode* currentNode = connectionNode;
+	
+	while( (currentNode != startNode) && (currentNode != goalNode) ){
+		currentNode = currentNode->getPredecessor(); 
+		path.push_front(currentNode);
+	}
+
+	currentNode = connectionNode->getConnection();
+	path.push_back(currentNode);
+
+	while( (currentNode != startNode) && (currentNode != goalNode) ){
+		currentNode = currentNode->getPredecessor();
+		path.push_back(currentNode);
+	}
+
+	if(currentNode == startNode){
+		std::reverse(path.begin(), path.end());
+	}
 
 	return path;
 }
@@ -281,6 +302,18 @@ std::deque<AbstractNode *> RRT::planPath(AbstractNode * const startNode, Abstrac
 	/* TODO:  Expand trees from both the start node and the goal node at the same time
 	 * until they meet. When extendClosestNode() returns a connection node, then call
 	 * constructPath() to find the complete path and return it. */
+	AbstractNode * randomNode = NULL;
+	AbstractNode * newNode = NULL;
+
+	for(int i = 0; i < maxIterations; i++){
+		randomNode = getRandomNode(startList, goalNode);
+		if( extendClosestNode(randomNode, startList, goalList) != TRAPPED){
+			if( extendClosestNode(startList.back(), goalList, startList) == REACHED){
+				return constructPath(connectionNode, startNode, goalNode);
+			}
+		}
+		std::swap(startList, goalList);
+	}
 	return result;
 }
 }  // namespace rrt
