@@ -310,7 +310,6 @@ std::deque<AbstractNode *> RRT::planPath(AbstractNode * const startNode, Abstrac
 	 * constructPath() to find the complete path and return it. */
 	AbstractNode * randomNode = NULL;
 	AbstractNode * newNode = NULL;
-
 	for(int i = 0; i < maxIterations; i++){
 		randomNode = getRandomNode(startList, goalNode);
 		if( extendClosestNode(randomNode, startList, goalList) != TRAPPED){
